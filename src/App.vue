@@ -44,6 +44,6 @@ export default {
   color: #019160;
 }
 .navbar .navbar-content .nav-item.router-link-exact-active {
-  background-color: #e5e5e5;
+  background-color: #00577b;
 }
 </style>

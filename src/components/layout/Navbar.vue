@@ -2,7 +2,6 @@
     <div class="navbar">
         <div class="logo-site">
             <div class="logo-box">
-                <div class="toggle-icon"></div>
                 <div class="amis-logo"></div>
             </div>
         </div>
@@ -16,22 +15,25 @@
                 <div class="nav-item-text">Báo cáo</div>
             </a>
             <a class="nav-item">
-                <div class="nav-item-icon nav-item-dashboard"></div>
+                <div class="nav-item-icon nav-item-bill"></div>
+                <div class="nav-item-text">Đơn hàng</div>
+            </a>
+            <a class="nav-item">
+                <div class="nav-item-icon nav-item-buy"></div>
                 <div class="nav-item-text">Mua hàng</div>
             </a>
             <router-link class="nav-item" to="/dictionary/customer">
-                <div class="nav-item-icon nav-item-dic"></div>
-                <div class="nav-item-text">Danh mục khách hàng</div>
+                <div class="nav-item-icon nav-item-promotion"></div>
+                <div class="nav-item-text">Khuyến mại</div>
             </router-link>
-             <router-link class="nav-item" to="/dictionary/employee">
-                <div class="nav-item-icon nav-item-dic"></div>
-                <div class="nav-item-text">Danh mục nhân viên</div>
+            <router-link class="nav-item" to="/dictionary/shop">
+                <div class="nav-item-icon nav-item-manage"></div>
+                <div class="nav-item-text">Quản lí cửa hàng</div>
             </router-link>
             <a class="nav-item">
-                <div class="nav-item-icon nav-item-setting"></div>
-                <div class="nav-item-text">Thiết lập hệ thống</div>
+                <div class="nav-item-icon nav-item-product"></div>
+                <div class="nav-item-text">Hàng hóa</div>
             </a>
-
         </div>
     </div>
 </template>
@@ -41,7 +43,7 @@ export default {
   data () {
     return {
       customer: '/dictionary/customer',
-      employee: '/dictionary/employee'
+      shop: '/dictionary/shop'
     };
   }
 };

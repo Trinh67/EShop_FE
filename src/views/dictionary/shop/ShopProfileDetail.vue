@@ -328,9 +328,11 @@ export default {
   display: none;
 }
 .m-dialog {
-  z-index: 999;
+  z-index: 3 !important;
 }
-
+.dialog-content{
+  z-index: 4;
+}
 .dialog-header {
   position: relative;
   height: 40px;
@@ -362,6 +364,7 @@ export default {
   right: 0;
   background-color: black;
   opacity: 0.4;
+  z-index: 3;
 }
 
 .dialog-content {
@@ -385,25 +388,6 @@ export default {
   justify-content: flex-end;
   padding: 12px 24px;
   box-sizing: border-box;
-}
-.el-avatar-employee {
-  padding-top: 16px;
-  padding-right: 16px;
-}
-.el-avatar-note {
-  font-size: 12px;
-}
-.el-avatar-employee .el-avatar {
-  border: 1px solid #ccc;
-  width: 160px;
-  height: 160px;
-  margin: 0 auto;
-  border-radius: 50%;
-  cursor: pointer;
-  background-image: url(/content/img/default-avatar.jpg);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
 }
 .currency-for-input {
   position: absolute;

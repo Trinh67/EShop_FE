@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Customer from '../views/dictionary/customer/CustomerList.vue'
-import Employee from '../views/dictionary/employee/EmployeeList.vue'
+import Shop from '../views/dictionary/shop/ShopList.vue'
 
 Vue.use(VueRouter)
 
@@ -24,12 +24,12 @@ const routes = [
     component: Customer
   },
   {
-    path: '/dictionary/employee',
-    name: 'Employee',
+    path: '/dictionary/shop',
+    name: 'Shop',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: Employee
+    component: Shop
   }
 ]
 
