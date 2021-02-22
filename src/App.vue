@@ -3,7 +3,7 @@
     <v-main>
       <Navbar />
       <Header />
-      <Content />
+      <Content v-if="isPanel" @reload="reloadData"/>
     </v-main>
   </div>
 </template>
@@ -24,8 +24,17 @@ export default {
 
   data: () => ({
     //
+    isPanel: true,
   }),
-};
+  methods:{
+    reloadData() {
+      this.isPanel = false;
+      this.$nextTick(() => {
+        this.isPanel = true;
+      });
+    }
+  },
+}
 </script>
 
 <style lang='scss'>

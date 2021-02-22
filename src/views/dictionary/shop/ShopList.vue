@@ -2,14 +2,28 @@
   <div class="content-body">
     <div class="header-content">
       <div class="toolbar">
-        <button class="m-btn m-btn-default" v-on:click="btnAddOnClick">
+        <button 
+          class="m-btn m-btn-default" 
+          @click="btnAddOnClick"
+        >
           <div class="btn-toolbar-icon icon-add"></div> Thêm mới
         </button>
-        <button class="m-btn m-btn-default"><div class="btn-toolbar-icon icon-multiply"></div> Nhân bản</button>
-        <button class="m-btn m-btn-default"><div class="btn-toolbar-icon icon-edit"></div> Sửa </button>
-        <button class="m-btn m-btn-default"><div class="btn-toolbar-icon icon-delete"></div> Xóa </button>
+        <button class="m-btn m-btn-default">
+          <div class="btn-toolbar-icon icon-multiply"></div> Nhân bản
+        </button>
+        <button 
+          class="m-btn m-btn-default"
+          @click="btnEditOnClick"
+        >
+          <div class="btn-toolbar-icon icon-edit"></div> Sửa 
+        </button>
+        <button 
+          class="m-btn m-btn-default" 
+          @click="btnDeleteOnClick">
+          <div class="btn-toolbar-icon icon-delete"></div> Xóa 
+        </button>
         <button class="m-btn m-btn-default"><div class="btn-toolbar-icon icon-load"></div> Nạp </button>
-        <Details @closePopup="closePopup" :isHide="isHideParent"/>
+        <Details @closePopup="closePopup" :isHide="isHideParent" @reload="reloadData"/>
       </div>
     </div> 
     <div
@@ -157,12 +171,14 @@
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="tbody">
           <tr
             class="el-table__row"
             v-for="shop in shops"
             :key="shop.shopId"
-            @dblclick="rowOnClick(shop)"
+            :id="shop.shopId"
+            @click="rowOnClick(shop.shopId)"
+            @dblclick="rowOnDBClick(shop.shopId)"
           >
             <td>
               <div>{{ shop.shopCode }}</div>
@@ -189,7 +205,6 @@
         <div class="btn-select-page m-btn-prev-page" v-on:click="DecreasePageNumber"></div>
         <div class="m-btn-list-page">
           Trang
-          <!-- <button class="btn-pagenumber btn-pagenumber-selected">{{startPoint + 1}}</button> -->
           <input 
             type="number" 
             v-model="currentPage"
@@ -231,6 +246,7 @@ export default {
   data() {
     return {
       isHideParent: true,
+      selectedId: null,
       /**
        * Dữ liệu dùng để tìm kiếm
        * Create By: TXTrinh (22/02/2021)
@@ -282,12 +298,71 @@ export default {
       this.isHideParent = false;
     },
     /**
-     * Sự kiến nhấn vào 1 hàng
+     * Hàm sử lí sự kiện nhấn vào sửa
+     */
+    btnEditOnClick(){
+      if(this.selectedId == null || this.selectedId == "") return;
+      this.isHideParent = false;
+      EventBus.$emit('showShop', this.selectedId);
+    },
+    /**
+     * Hàm sử lí sự kiện nhấn vào Xóa
+     */
+    btnDeleteOnClick(){
+      if(this.selectedId == null || this.selectedId == "") return;
+      //this.isHideParent = false;
+      //EventBus.$emit('showShop', this.selectedId);
+      let r = confirm("Bạn chắc chắn muốn xóa cửa hàng đã chọn!");
+      if(r == true) {
+      axios
+        .delete("http://localhost:52698/api/v1/shops?id=" + this.selectedId)
+        .then(response => {
+          alert(response.data['userMsg']);
+          this.reloadData();
+        })
+        .catch(error => {
+          alert(response.data['userMsg']);
+          console.log(error);
+          this.errored = true
+        })
+        .finally(() => this.loading = false)
+      };
+    },
+    /**
+     * Load lại dữ liệu
      * Create By: TXTrinh (22/02/2021)
      */
-    rowOnClick(shop){
+    reloadData(){
+      this.$emit('reloadData');
+    },
+    /**
+     * Sự kiện click vào 1 hàng
+     * Created By: TXTrinh (22/02/2021)
+     */
+    rowOnClick(id){
+      console.log("Click");
+      console.log(this.selectedId);
+      if(this.selectedId == id){
+       document.getElementById(id).classList.remove("selected");
+       this.selectedId = null;
+      }
+      else if(this.selectedId != null && this.selectedId!= ""){
+        document.getElementById(this.selectedId).classList.remove("selected");
+        document.getElementById(id).classList.add("selected");
+        this.selectedId = id;
+      } else{
+        document.getElementById(id).classList.add("selected");
+        this.selectedId = id;
+      }
+      console.log(this.selectedId);
+    },
+    /**
+     * Sự kiến nhấn đúp vào 1 hàng
+     * Create By: TXTrinh (22/02/2021)
+     */
+    rowOnDBClick(id){
       this.isHideParent = false;
-      EventBus.$emit('showShopDbClick', shop.shopId);
+      EventBus.$emit('showShop', id);
     },
     /**
      * Đóng modal dialog
@@ -322,13 +397,7 @@ export default {
         if(this.startPoint*this.number == this.shopDataLength) this.startPoint--;
         this.SearchShop();
     },
-    /**
-    * Load lại danh sách nhân viên
-    * Create By: TXTrinh (22/02/2021)
-    */
-    reloadData(){
-        this.$emit('reloadData');
-    },
+    
     /**
      * Tìm kiếm cửa hàng theo mã, tên, địa chỉ, số điện thoại ,trạng thái trong DB
      * Create By: TXTrinh (22/02/2021)
@@ -384,7 +453,7 @@ export default {
     }
   },
   /**
-   * Theo dõi thay đổi của biến 
+   * Theo dõi thay đổi của biến number
    * Create By: TXTrinh (22/02/2021)
    */
   watch: {

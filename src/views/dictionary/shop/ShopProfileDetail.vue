@@ -8,7 +8,7 @@
       <div class="dialog-modal"></div>
       <div class="dialog-content">
         <div class="dialog-header">
-          <div class="dialog-header-title">Thêm mới cửa hàng</div>
+          <div class="dialog-header-title">Thêm mới/Cập nhập cửa hàng</div>
           <div class="dialog-header-close">
             <div v-on:click="btnCancelOnClick">x</div>
           </div>
@@ -112,7 +112,10 @@
                   <option value="6118a7ff-742b-25db-a9c1-8e252c39bb73">Việt Nam</option>
                 </select>
               </div>
-              
+              <input type="hidden" 
+                v-model="ShopData.StatusId"
+                value="674934cc-42cf-20cf-1d4a-aea48a10ed18"
+              />
               <div class="m-row m-flex">
                 <div class="m-flex">
                   <div class="m-label m-flex-4">Tỉnh/Thành phố</div>
@@ -125,9 +128,8 @@
                     style="width: 248px; margin-left: 7px"
                   >
                     <option value="0">Chọn Tỉnh/Thành phố</option>
-                    <option value="148ed882-32b8-218e-9c20-39c2f00615e8">Phòng nhân sự</option>
-                    <option value="25c6c36e-1668-7d10-6e09-bf1378b8dc91">Phòng quản lý</option>
-                    <option value="3700cc49-55b5-69ea-4929-a2925c0f334d">Phòng đào tạo</option>
+                    <option value="148ed882-32b8-218e-9c20-39c2f00615e8">Hà Nội</option>
+                    <option value="25c6c36e-1668-7d10-6e09-bf1378b8dc91">Thanh Hóa</option>
                   </select>
                 </div>
                 <div class="m-flex mg-left-40px">
@@ -141,9 +143,8 @@
                     style="width: 256px;"
                   >
                     <option value="0">Chọn Quận/Huyện</option>
-                    <option value="148ed882-32b8-218e-9c20-39c2f00615e8">Phòng nhân sự</option>
-                    <option value="25c6c36e-1668-7d10-6e09-bf1378b8dc91">Phòng quản lý</option>
-                    <option value="3700cc49-55b5-69ea-4929-a2925c0f334d">Phòng đào tạo</option>
+                    <option value="148ed882-32b8-218e-9c20-39c2f00615e8">Cầu Giấy</option>
+                    <option value="25c6c36e-1668-7d10-6e09-bf1378b8dc91">Bắc Từ Liêm</option>
                   </select>
                 </div>
               </div>
@@ -159,9 +160,8 @@
                     style="width: 269px; margin-left: 10px"
                   >
                     <option value="0">Chọn Phường/Xã</option>
-                    <option value="148ed882-32b8-218e-9c20-39c2f00615e8">Phòng nhân sự</option>
-                    <option value="25c6c36e-1668-7d10-6e09-bf1378b8dc91">Phòng quản lý</option>
-                    <option value="3700cc49-55b5-69ea-4929-a2925c0f334d">Phòng đào tạo</option>
+                    <option value="148ed882-32b8-218e-9c20-39c2f00615e8">Trung Văn</option>
+                    <option value="25c6c36e-1668-7d10-6e09-bf1378b8dc91">Mai Dịch</option>
                   </select>
                 </div>
                 <div class="m-flex mg-left-40px">
@@ -181,13 +181,12 @@
         </div>
         <div class="dialog-footer">
           <button 
-            id="btnSave" 
+            id="btnHelp" 
             class="m-btn m-btn-default"
           >
-            <div class="btn-toolbar-icon icon-help"></div>
+            <div class="items-header icons-support"></div>
             <span 
               class="btn-text" 
-              v-on:click="saveShop"
             >
               Trợ giúp
             </span>
@@ -199,13 +198,13 @@
             <div class="btn-toolbar-icon icon-save"></div>
             <span 
               class="btn-text" 
-              v-on:click="saveShop"
+              v-on:click="editShop"
             >
               Lưu
             </span>
           </button>
           <button 
-            id="btnSave" 
+            id="btnSaveAdd" 
             class="m-btn m-btn-default"
           >
             <div class="btn-toolbar-icon icon-add-save"></div>
@@ -222,7 +221,7 @@
             v-on:click="btnCancelOnClick"
           >
             <div class="btn-toolbar-icon icon-cancel"></div>
-            Hủy
+            Hủy bỏ
           </button>
         </div>
       </div>
@@ -255,37 +254,51 @@ export default {
   },
   props: ['isHide'],
   methods: {
-    btnAddOnClick() {
-      //this.isHide = false;
-    },
+    /**
+     * Đóng dialog
+     * Created By: TXTrinh (22/02/2021)
+     */
     btnCancelOnClick() {
+      this.ShopData = {};
       this.$emit('closePopup', true)
-      //this.isHide = true;
     },
-    rowOnClick(shop) {
-      alert(shop.ShopName);
-    },
+    /**
+     * Lưu mới cửa hàng
+     * Created By: TXTrinh (22/02/2021)
+     */
     async saveShop() {
-      console.log('OK');
       await axios.post("http://localhost:52698/api/v1/shops", this.ShopData)
       .then(response => {
-          console.log(response.data['Data']);
-          alert("Thêm mới cửa hàng " + response.data['Message']);
-          this.ShopData['ShopCode'] = '';
-          this.ShopData['ShopName'] = '';
-          this.ShopData['PhoneNumber'] = '';
-          this.ShopData['Address'] = '';
-          this.ShopData['StatusId'] = '674934cc-42cf-20cf-1d4a-aea48a10ed18';
-          this.ShopData['District'] = '';
-          //this.$emit('addSuccess');
+          alert(response.data['userMsg']);
+          this.btnCancelOnClick(); 
+          this.$emit('reload');
       })
       .catch(error => {
-          alert(error.response.data['Message']);
+          alert(error.response.data['userMsg']);
       })
-    }
+    },
+    /**
+     * Cập nhập thông tin cửa hàng 
+     * Created By: TXTrinh (22/02/2021)
+     */
+    async editShop(){
+      await axios.put("http://localhost:52698/api/v1/shops", this.ShopData)
+      .then(response => {
+          alert(response.data['userMsg']);
+          this.btnCancelOnClick();
+          this.$emit('reload');
+      })
+      .catch(error => {
+          alert(error.response.data['userMsg']);
+      })
+    },
   },
+  /**
+   * Lấy thông tin cửa hàng theo Id
+   * Created By: TXTrinh (22/02/2021)
+   */
   mounted(){
-    EventBus.$on('showShopDbClick', idShop => {
+    EventBus.$on('showShop', idShop => {
         axios
         .get('http://localhost:52698/api/v1/shops/' + idShop)
         .then(response => {
@@ -378,6 +391,38 @@ export default {
   line-height: 40px;
   font-style: italic;
 }
+.dialog-footer button {
+  height: 35px;
+  width: auto;
+  color: #00577b;
+  font-weight: bold;
+  border-radius: 4px;
+  font-size: 16px;
+}
+.dialog-footer button:hover{
+  background-color: #0088c1;
+}
+.dialog-footer .icons-support{
+  margin-top: 0px!important;
+}
+#btnHelp{
+  margin-right: 170px;
+  margin-left: 0px;
+  padding-left: 0px;
+  background-color: #e9ebee;
+}
+#btnSave{
+  color: #ffffff;
+}
+#btnSaveAdd{
+  background-color: #ffffff;
+  border: 1px solid #00577b;
+}
+#btnSaveAdd:hover, #btnCancel:hover{
+  color: #ffffff;
+  background-color: #0088c1;
+}
+
 textarea{
   padding: 16px;
 }
@@ -386,5 +431,9 @@ select#cbxPosition{
 }
 input, select{
   height: 45px;
+}
+input:focus, select:focus, textarea:focus{
+  border: 1px solid #3ec347!important;
+  outline: none!important;
 }
 </style>
