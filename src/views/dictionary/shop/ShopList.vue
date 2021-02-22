@@ -11,17 +11,6 @@
         <button class="m-btn m-btn-default"><div class="btn-toolbar-icon icon-load"></div> Nạp </button>
         <Details @closePopup="closePopup" :isHide="isHideParent"/>
       </div>
-      <!-- <div class="content-feature">
-        <button
-          id="btnAdd"
-          class="m-btn m-btn-default"
-          v-on:click="btnAddOnClick"
-        >
-          <div class="m-btn-icon icon-add"></div>
-          <div class="btn-text">Thêm nhân viên</div>
-        </button>
-        <Details @closePopup="closePopup" :isHide="isHideParent"/>
-      </div> -->
     </div> 
     <div
       class="grid grid-shop el-table el-table--fit el-table--scrollable-y el-table--enable-row-hover el-table--enable-row-transition"
@@ -94,6 +83,8 @@
                 class="input-search"
                 type="text"
                 placeholder=""
+                v-model="txtSearchShopCode"
+                @change="SearchShop()"
               />
             </th>
             <th>
@@ -109,6 +100,8 @@
                 class="input-search"
                 type="text"
                 placeholder=""
+                v-model="txtSearchShopName"
+                @change="SearchShop()"
               />
             </th>
             <th>
@@ -124,6 +117,8 @@
                 class="input-search"
                 type="text"
                 placeholder=""
+                v-model="txtSearchAddress"
+                @change="SearchShop()"
               />
             </th>
             <th>
@@ -139,6 +134,8 @@
                 class="input-search"
                 type="text"
                 placeholder=""
+                v-model="txtSearchPhoneNumber"
+                @change="SearchShop()"
               />
             </th>
             <th>
@@ -146,15 +143,16 @@
                 id="txtSearchStatus"
                 fieldName="StatusName"
                 fieldValue="StatusId"
-                api="/api/customergroups"
                 class="m-control"
+                v-model="txtSearchStatus"
+                @change="SearchShop()"
               >
                 <option value="">
                   Tất cả trạng thái
                 </option>
-                <option class="" value="148ed882-32b8-218e-9c20-39c2f00615e8">Đang hoạt động</option>
-                <option class="" value="25c6c36e-1668-7d10-6e09-bf1378b8dc91">Tạm dừng hoạt động</option>
-                <option class="" value="3700cc49-55b5-69ea-4929-a2925c0f334d">Chờ kích hoạt</option>
+                <option class="" value="674934cc-42cf-20cf-1d4a-aea48a10ed18">Đang hoạt động</option>
+                <option class="" value="64a59a25-2488-54b0-f6b4-c8af08a50cbf">Tạm dừng hoạt động</option>
+                <option class="" value="34bd2cef-5026-567c-3b71-153b37881afe">Chờ kích hoạt</option>
               </select>
             </th>
           </tr>
@@ -162,24 +160,24 @@
         <tbody>
           <tr
             class="el-table__row"
-            v-for="employee in employees"
-            :key="employee.EmployeeId"
-            @dblclick="rowOnClick(employee)"
+            v-for="shop in shops"
+            :key="shop.shopId"
+            @dblclick="rowOnClick(shop)"
           >
             <td>
-              <div>{{ employee.shopCode }}</div>
+              <div>{{ shop.shopCode }}</div>
             </td>
             <td>
-              <div>{{ employee.shopName }}</div>
+              <div>{{ shop.shopName }}</div>
             </td>
             <td>
-              <div>{{ employee.address }}</div>
+              <div>{{ shop.address }}</div>
             </td>
             <td>
-              <div>{{ employee.phoneNumber }}</div>
+              <div>{{ shop.phoneNumber }}</div>
             </td>
             <td>
-              <div>{{ employee.statusName }}</div>
+              <div>{{ shop.statusName }}</div>
             </td>
           </tr>
         </tbody>
@@ -187,16 +185,22 @@
     </div>
     <div class="paging-bar">
       <div class="paging-option">
-        <div class="btn-select-page m-btn-firstpage"></div>
-        <div class="btn-select-page m-btn-prev-page"></div>
+        <div class="btn-select-page m-btn-firstpage" v-on:click="FirstPageNumber"></div>
+        <div class="btn-select-page m-btn-prev-page" v-on:click="DecreasePageNumber"></div>
         <div class="m-btn-list-page">
           Trang
-          <button class="btn-pagenumber btn-pagenumber-selected">1</button>
+          <!-- <button class="btn-pagenumber btn-pagenumber-selected">{{startPoint + 1}}</button> -->
+          <input 
+            type="number" 
+            v-model="currentPage"
+            id="current-page"
+            @change="SetCurrentPage()"
+          />
           trên {{totalPage}}
         </div>
-        <div class="btn-select-page m-btn-next-page"></div>
-        <div class="btn-select-page m-btn-lastpage"></div>
-        <div class="btn-select-page m-btn-refresh"></div>
+        <div class="btn-select-page m-btn-next-page" v-on:click="IncreasePageNumber"></div>
+        <div class="btn-select-page m-btn-lastpage" v-on:click="LastPageNumber"></div>
+        <div class="btn-select-page m-btn-refresh" @click="reloadData"></div>
       </div>
       <div class="paging-record-option">
         <select v-model="number" class="input-number-record">
@@ -206,7 +210,7 @@
           <option :value='100'>100 </option>
         </select>
       </div>
-      <div class="paging-record-info">Hiển thị <b>{{startListEmp}}-{{finishListEmp}}/{{empDataLength}}</b> nhân viên</div>
+      <div class="paging-record-info">Hiển thị <b>{{startListShop}}-{{finishListShop}}/{{shopDataLength}}</b> nhân viên</div>
     </div>
     
   </div>
@@ -217,6 +221,7 @@
 import Vue from 'vue';
 import * as axios from "axios";
 import Details from "./ShopProfileDetail";
+import { EventBus } from './../../../EventBus.js'
 export default {
   name: "Shop",
   components: {
@@ -226,26 +231,32 @@ export default {
   data() {
     return {
       isHideParent: true,
-      // Dữ liệu tìm kiếm
-      empCode: null,
-      position: "no",
-      department: "no",
-      // Phân trang
-      empDataLength: 800,
+      /**
+       * Dữ liệu dùng để tìm kiếm
+       * Create By: TXTrinh (22/02/2021)
+       */
+      txtSearchShopCode: "",
+      txtSearchShopName: "",
+      txtSearchAddress: "",
+      txtSearchPhoneNumber: "",
+      txtSearchStatus: "",
+      
+      /**
+       * Dữ liệu dùng phân trang
+       * Create By: TXTrinh (22/02/2021)
+       */
+      shopDataLength: 200,
       startPoint: 0,
       number: 15,
       totalPage: 10,
-      startListEmp: 1,
-      finishListEmp: 1,
-
+      startListShop: 1,
+      finishListShop: 1,
+      currentPage: 1,
       /**
-       * Dữ liệu nhân viên
+       * Dữ liệu thông tin cửa hàng
+       * Create By: TXTrinh (22/02/2021)
        */
-      selectedEmployee: {
-        EmployeeId: 1,
-        FullName: "Nguyễn Văn Mạnh",
-      },
-      employees: [],
+      shops: [],
       headers: [
         {
           text: "Mã cửa hàng",
@@ -253,64 +264,146 @@ export default {
           sortable: false,
           value: "ShopCode",
         },
-        { text: "Họ và tên", value: "FullName", align: "end" },
-        { text: "Ngày sinh", value: "DateOfBirth" },
-        { text: "Giới tính", value: "GenderName" },
-        { text: "Vị trí", value: "PositionName" },
-        { text: "Phòng ban", value: "DepartmentName" },
-        { text: "Địa chỉ Email", value: "Email" },
+        { text: "Tên cửa hàng", value: "ShopName", align: "end" },
+        { text: "Địa chỉ cửa hàng", value: "Address" },
         { text: "Số điện thoại", value: "PhoneNumber" },
-        { text: "Mức lương", value: "Salary" },
-        { text: "Địa chỉ", value: "Address" },
-        { text: "Trạng thái công việc", value: "WorkStatusName" },
+        { text: "Mã trạng thái", value: "StatusId" },
+        { text: "Tên trạng thái", value: "StatusName" },
       ],
     };
   },
 
   methods: {
+    /**
+     * Hàm sử lí sự kiện nhấn vào thêm mới
+     * Create By: TXTrinh (22/02/2021)
+     */
     btnAddOnClick() {
       this.isHideParent = false;
     },
-    rowOnClick(employee){
-      alert(employee.FullName);
+    /**
+     * Sự kiến nhấn vào 1 hàng
+     * Create By: TXTrinh (22/02/2021)
+     */
+    rowOnClick(shop){
+      this.isHideParent = false;
+      EventBus.$emit('showShopDbClick', shop.shopId);
     },
+    /**
+     * Đóng modal dialog
+     * Create By: TXTrinh (22/02/2021)
+     */
     closePopup(isHide){
       this.isHideParent = isHide;
     },
+
     /**
-     * Load dữ liệu theo điểm đầu và số lượng bản ghi
+     * Các hàm thay đổi startPoint để phân trang
+     * Create By: TXTrinh (22/02/2021)
      */
-    loadData(){
-        axios
-        .get('http://localhost:52698/api/v1/shops/GetWithRange?startPoint=' + this.startPoint*this.number + '&number=' + this.number)
-        .then(response => {
-            this.employees = response.data;
-            this.startListEmp = this.number*this.startPoint + 1;
-            this.finishListEmp = this.number*(this.startPoint + 1);
-            this.totalPage = Math.ceil(this.empDataLength/this.number);
-        })
-        .catch(error => {
-            console.log(error)
-            this.errored = true
-        })
-        .finally(() => this.loading = false);
+    IncreasePageNumber(){
+        if(this.startPoint == parseInt(this.shopDataLength/this.number)) return;
+        this.startPoint++;
+        this.SearchShop();
     },
+    DecreasePageNumber(){
+        if(this.startPoint == 0) return;
+        this.startPoint--;
+        this.SearchShop();
+    },
+    FirstPageNumber(){
+        if(this.startPoint == 0) return;
+        this.startPoint = 0;
+        this.SearchShop();
+    },
+    LastPageNumber(){
+        if(this.startPoint == parseInt(this.shopDataLength/this.number)) return;
+        this.startPoint = parseInt(this.shopDataLength/this.number);
+        if(this.startPoint*this.number == this.shopDataLength) this.startPoint--;
+        this.SearchShop();
+    },
+    /**
+    * Load lại danh sách nhân viên
+    * Create By: TXTrinh (22/02/2021)
+    */
+    reloadData(){
+        this.$emit('reloadData');
+    },
+    /**
+     * Tìm kiếm cửa hàng theo mã, tên, địa chỉ, số điện thoại ,trạng thái trong DB
+     * Create By: TXTrinh (22/02/2021)
+     */
+    SearchShop(){
+        let ShopCode, ShopName, Address, PhoneNumber, StatusId, isNull = true;
+        this.currentPage = this.startPoint + 1;
+        ShopCode = this.txtSearchShopCode
+        ShopName = this.txtSearchShopName;
+        Address = this.txtSearchAddress;
+        PhoneNumber = this.txtSearchPhoneNumber;
+        StatusId = this.txtSearchStatus;
+        let query = "http://localhost:52698/api/v1/shops/FilterShop?"
+        if(ShopCode != null && ShopCode != "") {query += "ShopCode=" + ShopCode; isNull = false};
+        if(ShopName != null && ShopName != "") {
+          if(!isNull) query += "&ShopName=" + ShopName;
+          else{query += "ShopName=" + ShopName; isNull = false}
+        };
+        if(Address != null && Address != "") {
+          if(!isNull) query += "&Address=" + Address;
+          else{query += "Address=" + Address; isNull = false}
+        };
+        if(PhoneNumber != null && PhoneNumber != "") {
+          if(!isNull) query += "&PhoneNumber=" + PhoneNumber;
+          else{query += "PhoneNumber=" + PhoneNumber; isNull = false}
+        };
+        if(StatusId != null && StatusId != "") {
+          if(!isNull) query += "&StatusId=" + StatusId;
+          else{query += "StatusId=" + StatusId; isNull = false}
+        };
+        axios
+            .get(query)
+            .then(response => {
+                this.shopDataLength = response.data.length;
+                this.startListShop = this.number*this.startPoint;
+                this.finishListShop = this.number*(this.startPoint + 1);
+                this.shops = response.data.slice(this.startListShop, this.finishListShop);
+                this.totalPage = Math.ceil(this.shopDataLength/this.number);
+            })
+            .catch(error => {
+                console.log(error)
+                this.errored = true
+            })
+            .finally(() => this.loading = false);    
+    },
+    /**
+     * Lọc dữ liệu theo Pages
+     * Create By: TXTrinh (22/02/2021)
+     */
+    SetCurrentPage(){
+      this.startPoint = this.currentPage - 1;
+      this.SearchShop();
+    }
   },
   /**
    * Theo dõi thay đổi của biến 
+   * Create By: TXTrinh (22/02/2021)
    */
   watch: {
         number: function() {
-            this.loadData();
+            this.SearchShop();
         }
     },
+  /**
+   * Load dữ liệu ngay khi truy cập
+   * Create By: TXTrinh (22/02/2021)
+   */
   async created() {
     const response = await axios.get("http://localhost:52698/api/v1/shops");
-    this.employees = response.data.slice(this.startPoint, this.number);
-    this.empDataLength = response.data.length;
-    this.startListEmp = this.number*this.startPoint + 1;
-    this.finishListEmp = this.number*(this.startPoint + 1);
-    this.totalPage = Math.ceil(this.empDataLength/this.number);
+    this.shops = response.data.slice(this.startPoint, this.number);
+    this.currentPage = this.startPoint + 1;
+    this.shopDataLength = response.data.length;
+    this.startListShop = this.number*this.startPoint + 1;
+    this.finishListShop = this.number*(this.startPoint + 1);
+    this.totalPage = Math.ceil(this.shopDataLength/this.number);
   },
 };
 </script>
@@ -354,6 +447,9 @@ tr .filter{
   margin: 4px;
   border: 1px solid #d9d9d9 !important;
   width: calc(100% - 8px);
+}
+#current-page{
+  width: 70px;
 }
 td.filter{
   padding: 0px !important;

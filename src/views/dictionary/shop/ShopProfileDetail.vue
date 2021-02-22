@@ -8,182 +8,139 @@
       <div class="dialog-modal"></div>
       <div class="dialog-content">
         <div class="dialog-header">
-          <div class="dialog-header-title">THÔNG TIN NHÂN VIÊN</div>
+          <div class="dialog-header-title">Thêm mới cửa hàng</div>
           <div class="dialog-header-close">
-            <button v-on:click="btnCancelOnClick">x</button>
+            <div v-on:click="btnCancelOnClick">x</div>
           </div>
         </div>
         <div class="dialog-body">
           <div class="m-row m-flex">
-            <div class="m-col el-avatar-employee m-flex-1">
-              <div class="el-avatar"></div>
-              <div class="el-avatar-note text-align-center">
-                (Vui lòng chọn ảnh có định dạng <br /><b
-                  >.jpg, .jpeg, .png, .gif. </b
-                >)
-              </div>
-            </div>
-            <div class="m-col el-left m-flex-4">
-              <div class="group-label-info">A. Thông tin chung:</div>
-              <hr class="hr-group-label" />
-              <div class="m-row mg-top-0 m-flex">
-                <div class="m-col m-flex-1">
-                  <div class="m-label">
-                    Mã nhân viên (<span class="label-required">*</span>)
-                  </div>
-                  <div class="m-control">
-                    <input
-                      id="txtEmployeeCode"
-                      fieldName="EmployeeCode"
-                      required
-                      class="input-required"
-                      type="text"
-                      v-model="EmpData.EmployeeCode"
-                    />
-                  </div>
-                </div>
-                <div class="m-flex-1 mg-left-10px">
-                  <div class="m-label">
-                    Họ và tên (<span class="label-required">*</span>)
-                  </div>
-                  <div class="m-control">
-                    <input
-                      id="txtFullName"
-                      fieldName="FullName"
-                      class="input-required"
-                      type="text"
-                      v-model="EmpData.FullName"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
+            <div class="m-row el-left m-flex-4">
               <div class="m-row m-flex">
-                <div class="m-flex-1">
-                  <div class="m-label">Ngày sinh</div>
+                <div class="m-label m-flex-2">
+                  Mã cửa hàng <span class="label-required">*</span>
+                </div>
+                <div class="m-control m-flex-10">
                   <input
-                    class="m-combobox-input"
-                    type="date"
-                    autocomplete="off"
-                    v-model="EmpData.DateOfBirth"
-                  />
-                </div>
-                <div class="m-flex-1 mg-left-10px">
-                  <div class="m-label">Giới tính</div>
-                  <select id="cbxGender" class="m-control" v-model="EmpData.Gender">
-                    <option class="gender" value="1">Nam</option>
-                    <option class="gender" value="0">Nữ</option>
-                    <option class="gender" value="2">Khác</option>
-                  </select>
-                </div>
-              </div>
-              <div class="m-row m-flex">
-                <div class="m-flex-1">
-                  <div
-                    class="m-label"
-                    title="Số chứng minh thư nhân dân hoặc căn cước công dân"
-                  >
-                    Số CMTND/ Căn cước (<span class="label-required">*</span>)
-                  </div>
-                  <div class="m-control">
-                    <input
-                      id="txtIdentityNumber"
-                      fieldName="text"
-                      type="text"
-                      v-model="EmpData.IdentifyNumber"
-                      required
-                    />
-                  </div>
-                </div>
-                <div class="m-flex-1 mg-left-10px">
-                  <div class="m-label">Ngày cấp</div>
-                  <input
-                    class="m-combobox-input"
-                    type="date"
-                    autocomplete="off"
-                    v-model="EmpData.DateOfIn"
+                    id="txtShopCode"
+                    fieldName="ShopCode"
+                    required
+                    class="input-required"
+                    type="text"
+                    v-model="ShopData.shopCode"
                   />
                 </div>
               </div>
-              <div class="m-row m-flex">
-                <div class="m-flex-1">
-                  <div class="m-label">Nơi cấp</div>
-                  <div class="m-control">
-                    <input
-                      id="txtIdentityPlace"
-                      fieldName="PhoneNumber"
-                      class="input-required"
-                      type="text"
-                      v-model="EmpData.PlaceOfIN"
-                    />
-                  </div>
+              <div class="m-flex mg-top-15px">
+                <div class="m-label m-flex-2">
+                  Tên cửa hàng <span class="label-required">*</span>
                 </div>
-                <div class="m-flex-1"></div>
+                <div class="m-control m-flex-10">
+                  <input
+                    id="txtShopName"
+                    fieldName="ShopName"
+                    class="input-required"
+                    type="text"
+                    v-model="ShopData.shopName"
+                    required
+                  />
+                </div>
               </div>
-              <div class="m-row m-flex">
-                <div class="m-col m-flex-1">
-                  <div class="m-label">
-                    Email (<span class="label-required">*</span>)
-                  </div>
-                  <div class="m-control">
-                    <input
-                      id="txtEmail"
-                      fieldName="Email"
-                      type="email"
-                      required
-                      placeholder="example@domain.com"
-                      v-model="EmpData.Email"
-                    />
-                  </div>
+              
+              <div class="m-flex mg-top-15px">
+                <div class="m-label m-flex-2">
+                  Địa chỉ <span class="label-required">*</span>
                 </div>
-                <div class="m-flex-1 mg-left-10px">
+                <div class="m-control m-flex-10">
+                  <textarea
+                    id="txtAddress"
+                    fieldName="Address"
+                    class="input-required"
+                    type="text"
+                    v-model="ShopData.address"
+                    rows= "8"
+                    cols= "76"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="m-flex mg-top-15px">
+                <div class="m-flex">
                   <div class="m-label">
-                    Số điện thoại (<span class="label-required">*</span>)
+                    Số điện thoại
                   </div>
                   <div class="m-control">
                     <input
                       id="txtPhoneNumber"
-                      fieldName="FullName"
+                      fieldName="ShopName"
                       class="input-required"
                       type="text"
-                      v-model="EmpData.PhoneNumber"
+                      v-model="ShopData.phoneNumber"
                       required
+                      style="width: 226px; margin-left: 42px"
+                    />
+                  </div>
+                </div>
+                <div class="m-flex mg-left-40px">
+                  <div class="m-label">
+                    Mã số thuế
+                  </div>
+                  <div class="m-control mg-left-40px">
+                    <input
+                      id="txtShopTaxCode"
+                      fieldName="ShopTaxCode"
+                      type="text"
+                      required
+                      v-model="ShopData.shopTaxCode"
+                      style="width: 226px"
                     />
                   </div>
                 </div>
               </div>
-              <div class="group-label-info" style="margin-top: 30px">
-                B. Thông tin công việc:
+              <div class="m-flex mg-top-15px">
+                <div class="m-label m-flex-3">Quốc gia</div>
+                <select
+                  id="Country"
+                  fieldName="CountryName"
+                  fieldValue="CountryId"
+                  class="m-control m-flex-5"
+                  v-model="ShopData.CountryId"
+                  style="width: 124px; margin-right: 373px"
+                >
+                  <option value="0">Chọn Quốc gia</option>
+                  <option value="6118a7ff-742b-25db-a9c1-8e252c39bb73">Việt Nam</option>
+                </select>
               </div>
-              <hr class="hr-group-label" />
+              
               <div class="m-row m-flex">
-                <div class="m-flex-1">
-                  <div class="m-label">Vị trí</div>
+                <div class="m-flex">
+                  <div class="m-label m-flex-4">Tỉnh/Thành phố</div>
                   <select
-                    id="cbxPosition"
-                    fieldName="CustomerGroupName"
-                    fieldValue="CustomerGroupId"
-                    api="/api/customergroups"
-                    class="m-control"
-                    v-model="EmpData.PositionId"
+                    id="Province"
+                    fieldName="ProvinceName"
+                    fieldValue="ProvinceId"
+                    class="m-control m-flex-7"
+                    v-model="ShopData.ProvinceId"
+                    style="width: 248px; margin-left: 7px"
                   >
-                    <option value="2b031b59-5276-589c-9d75-2a7ae1c799c4">Chọn vị trí</option>
-                    <option value="6118a7ff-742b-25db-a9c1-8e252c39bb73">Giám đốc</option>
-                    <option value="26021185-77af-263c-842a-acc8fc2f00af">Trưởng phòng</option>
-                    <option value="2b031b59-5276-589c-9d75-2a7ae1c799c8">Nhân viên</option>
+                    <option value="0">Chọn Tỉnh/Thành phố</option>
+                    <option value="148ed882-32b8-218e-9c20-39c2f00615e8">Phòng nhân sự</option>
+                    <option value="25c6c36e-1668-7d10-6e09-bf1378b8dc91">Phòng quản lý</option>
+                    <option value="3700cc49-55b5-69ea-4929-a2925c0f334d">Phòng đào tạo</option>
                   </select>
                 </div>
-                <div class="m-flex-1 mg-left-10px">
-                  <div class="m-label">Phòng ban</div>
+                <div class="m-flex mg-left-40px">
+                  <div class="m-label m-flex-4">Quận/Huyện</div>
                   <select
-                    id="cbnDepartment"
-                    fieldName="CustomerGroupName"
-                    fieldValue="CustomerGroupId"
-                    api="/api/customergroups"
-                    class="m-control"
-                    v-model="EmpData.DepartmentId"
+                    id="District"
+                    fieldName="DistrictName"
+                    fieldValue="DistrictId"
+                    class="m-control m-flex-7"
+                    v-model="ShopData.DistrictId"
+                    style="width: 256px;"
                   >
-                    <option value="25c6c36e-1668-7d10-6e09-bf1378b8dc98">Chọn Phòng ban</option>
+                    <option value="0">Chọn Quận/Huyện</option>
                     <option value="148ed882-32b8-218e-9c20-39c2f00615e8">Phòng nhân sự</option>
                     <option value="25c6c36e-1668-7d10-6e09-bf1378b8dc91">Phòng quản lý</option>
                     <option value="3700cc49-55b5-69ea-4929-a2925c0f334d">Phòng đào tạo</option>
@@ -191,61 +148,81 @@
                 </div>
               </div>
               <div class="m-row m-flex">
-                <div class="m-flex-1">
-                  <div class="m-label">Mã số thuế cá nhân</div>
-                  <div class="m-control">
-                    <input id="txtAddress" fieldName="Address" type="text" v-model="EmpData.TaxCode"/>
-                  </div>
-                </div>
-                <div class="m-flex-1 mg-left-10px">
-                  <div class="m-label">Mức lương cơ bản</div>
-                  <div class="m-control">
-                    <input
-                      id="txtSalary"
-                      fieldName="Salary"
-                      type="text"
-                      style="text-align: right; padding-right: 56px"
-                      v-model="EmpData.Salary"
-                    /><span class="currency-for-input">(VNĐ)</span>
-                  </div>
-                </div>
-              </div>
-              <div class="m-row m-flex">
-                <div class="m-flex-1">
-                  <div class="m-label">Ngày gia nhập</div>
-                  <input
-                    class="m-combobox-input"
-                    type="date"
-                    autocomplete="off"
-                    v-model="EmpData.DateOfBeginWork"
-                  />
-                </div>
-                <div class="m-flex-1 mg-left-10px">
-                  <div class="m-label">Tình trạng công việc</div>
+                <div class="m-flex">
+                  <div class="m-label m-flex-4">Phường/Xã</div>
                   <select
-                    id="cboWorkStatus"
-                    fieldName="CustomerGroupName"
-                    fieldValue="CustomerGroupId"
-                    api="/api/customergroups"
-                    class="m-control"
-                    v-model="EmpData.Status"
+                    id="Ward"
+                    fieldName="WardName"
+                    fieldValue="WardId"
+                    class="m-control m-flex-7"
+                    v-model="ShopData.WardId"
+                    style="width: 269px; margin-left: 10px"
                   >
-                    <option value="2">Đang làm việc</option>
-                    <option value="0">Đã nghỉ việc</option>
-                    <option value="1">Đang thử việc</option>
-                    <option value="3">Đã nghỉ hưu</option>
+                    <option value="0">Chọn Phường/Xã</option>
+                    <option value="148ed882-32b8-218e-9c20-39c2f00615e8">Phòng nhân sự</option>
+                    <option value="25c6c36e-1668-7d10-6e09-bf1378b8dc91">Phòng quản lý</option>
+                    <option value="3700cc49-55b5-69ea-4929-a2925c0f334d">Phòng đào tạo</option>
                   </select>
+                </div>
+                <div class="m-flex mg-left-40px">
+                  <div class="m-label m-flex-4">Đường phố</div>
+                  <input
+                    id="Street"
+                    fieldName="StreetName"
+                    type="text"
+                    class="m-control m-flex-7"
+                    placeholder="Đường phố"
+                    style="width: 266px;"
+                  /> 
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div class="dialog-footer">
-          <button id="btnCancel" class="m-btn m-btn-default m-btn-cancel" v-on:click="btnCancelOnClick">
-            Hủy
+          <button 
+            id="btnSave" 
+            class="m-btn m-btn-default"
+          >
+            <div class="btn-toolbar-icon icon-help"></div>
+            <span 
+              class="btn-text" 
+              v-on:click="saveShop"
+            >
+              Trợ giúp
+            </span>
           </button>
-          <button id="btnSave" class="m-btn m-btn-default">
-            <i class="far fa-save"></i><span class="btn-text" v-on:click="saveEmployee">Lưu</span>
+          <button 
+            id="btnSave" 
+            class="m-btn m-btn-default"
+          >
+            <div class="btn-toolbar-icon icon-save"></div>
+            <span 
+              class="btn-text" 
+              v-on:click="saveShop"
+            >
+              Lưu
+            </span>
+          </button>
+          <button 
+            id="btnSave" 
+            class="m-btn m-btn-default"
+          >
+            <div class="btn-toolbar-icon icon-add-save"></div>
+            <span 
+              class="btn-text" 
+              v-on:click="saveShop"
+            >
+              Lưu và thêm mới
+            </span>
+          </button>
+          <button 
+            id="btnCancel" 
+            class="m-btn m-btn-default m-btn-cancel" 
+            v-on:click="btnCancelOnClick"
+          >
+            <div class="btn-toolbar-icon icon-cancel"></div>
+            Hủy
           </button>
         </div>
       </div>
@@ -254,8 +231,28 @@
 </template>
 <script>
 import * as axios from "axios";
-
+import { EventBus } from './../../../EventBus.js'
 export default {
+  data() {
+    return {
+      dialog: false,
+      //isHide: true,
+      display: "none",
+
+      ShopData: {
+        'shopId': '',
+        'shopCode': '',
+        'shopName': '',
+        'address': '',
+        'phoneNumber': '',
+        'statusId': '674934cc-42cf-20cf-1d4a-aea48a10ed18',
+        'countryId': 0,
+        'provinceId': 0,
+        'districtId': 0,
+        'wardId': 0,
+      },
+    };
+  },
   props: ['isHide'],
   methods: {
     btnAddOnClick() {
@@ -265,30 +262,21 @@ export default {
       this.$emit('closePopup', true)
       //this.isHide = true;
     },
-    rowOnClick(employee) {
-      alert(employee.FullName);
+    rowOnClick(shop) {
+      alert(shop.ShopName);
     },
-    async saveEmployee() {
+    async saveShop() {
       console.log('OK');
-      await axios.post("https://localhost:44337/api/Employees", this.EmpData)
+      await axios.post("http://localhost:52698/api/v1/shops", this.ShopData)
       .then(response => {
           console.log(response.data['Data']);
-          alert("Thêm mới nhân viên " + response.data['Message']);
-          this.EmpData['EmployeeCode'] = '';
-          this.EmpData['FullName'] = '';
-          this.EmpData['DateOfBirth'] = '';
-          this.EmpData['Gender'] = '';
-          this.EmpData['IdentifyNumber'] = '';
-          this.EmpData['DateOfIN'] = '';
-          this.EmpData['PlaceOfIN'] = '';
-          this.EmpData['Email'] = '';
-          this.EmpData['PhoneNumber'] = '';
-          this.EmpData['PositionId'] = '2b031b59-5276-589c-9d75-2a7ae1c799c4';
-          this.EmpData['DepartmentId'] = '25c6c36e-1668-7d10-6e09-bf1378b8dc98';
-          this.EmpData['DateOfBeginWork'] = '';
-          this.EmpData['Salary'] = '';
-          this.EmpData['Status'] = '';
-
+          alert("Thêm mới cửa hàng " + response.data['Message']);
+          this.ShopData['ShopCode'] = '';
+          this.ShopData['ShopName'] = '';
+          this.ShopData['PhoneNumber'] = '';
+          this.ShopData['Address'] = '';
+          this.ShopData['StatusId'] = '674934cc-42cf-20cf-1d4a-aea48a10ed18';
+          this.ShopData['District'] = '';
           //this.$emit('addSuccess');
       })
       .catch(error => {
@@ -296,31 +284,20 @@ export default {
       })
     }
   },
-  data() {
-    return {
-      dialog: false,
-      //isHide: true,
-      display: "none",
-
-      EmpData: {
-        'EmployeeCode': '',
-        'FullName': '',
-        'DateOfBirth': '',
-        'Gender' : '',
-        'IdentifyNumber': '',
-        'DateOfIN': '',
-        'PlaceOfIN': '',
-        'Email' : '',
-        'PhoneNumber': '',
-        'PositionId': '2b031b59-5276-589c-9d75-2a7ae1c799c4',
-        'DepartmentId': '25c6c36e-1668-7d10-6e09-bf1378b8dc98',
-        'TaxCode' : '',
-        'Salary': '',
-        'DateOfBeginWork': '',
-        'Status': '',
-      },
-    };
-  },
+  mounted(){
+    EventBus.$on('showShopDbClick', idShop => {
+        axios
+        .get('http://localhost:52698/api/v1/shops/' + idShop)
+        .then(response => {
+            this.ShopData = response.data[0];
+        })
+        .catch(error => {
+            console.log(error)
+            this.errored = true
+        })
+        .finally(() => this.loading = false)
+        })
+    }
 };
 </script>
 <style scoped>
@@ -335,11 +312,15 @@ export default {
 }
 .dialog-header {
   position: relative;
-  height: 40px;
+  height: 45px;
   line-height: 60px;
+  padding-bottom: 16px;
   padding-left: 16px;
+  border-radius: 4px;
   display: flex;
   font-size: 24px;
+  font-weight: bold;
+  background-color: #d8d8d8;
 }
 
 .dialog-header-close {
@@ -348,12 +329,12 @@ export default {
   width: 24px;
   height: 24px;
   border-radius: 50%;
+  color: #a5a5a5;
   cursor: pointer;
-  top: 10px;
+  top: 16px;
   align-items: center;
   border: none;
-  background-color: transparent;
-  font-size: 24px;
+  font-size: 30px;
   line-height: 24px;
 }
 .dialog-modal {
@@ -371,9 +352,10 @@ export default {
   position: fixed;
   border-radius: 5px;
   width: 750px;
+  height: 700px;
   background-color: #fff;
   left: calc(50% - 325px);
-  top: calc(50% - 450px);
+  top: calc(50% - 375px);
 }
 .dialog-body {
   padding: 0 16px 16px 16px;
@@ -381,18 +363,28 @@ export default {
 .dialog-footer {
   display: flex;
   width: 100%;
-  height: 60px;
+  height: 65px;
   background-color: #e9ebee;
   border-radius: 0 0 5px 5px;
   align-items: center;
   justify-content: flex-end;
   padding: 12px 24px;
   box-sizing: border-box;
+  margin-top: 10px;
 }
 .currency-for-input {
   position: absolute;
   right: 40px;
   line-height: 40px;
   font-style: italic;
+}
+textarea{
+  padding: 16px;
+}
+select#cbxPosition{
+  margin-right: 375px;
+}
+input, select{
+  height: 45px;
 }
 </style>
