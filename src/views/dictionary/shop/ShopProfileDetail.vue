@@ -29,6 +29,10 @@
                     type="text"
                     v-model="ShopData.shopCode"
                   />
+                  <small 
+                    id="error-code" class="error-msg"
+                    :class="{isHide:isHideErrorCode}"
+                  >* Không được để trống, chỉ chứa chữ in hoa và số, đúng 6 kí tự</small>
                 </div>
               </div>
               <div class="m-flex mg-top-15px">
@@ -44,6 +48,10 @@
                     v-model="ShopData.shopName"
                     required
                   />
+                  <small 
+                    id="error-name" class="error-msg"
+                    :class="{isHide:isHideErrorName}"
+                  >* Tên cửa hàng không được để trống</small>
                 </div>
               </div>
               
@@ -62,25 +70,36 @@
                     cols= "78"
                     required
                   />
+                  <small 
+                    id="error-address" class="error-msg"
+                    :class="{isHide:isHideErrorAddress}"
+                  >* Địa chỉ cửa hàng không được để trống</small>
                 </div>
               </div>
 
               <div class="m-flex mg-top-15px">
-                <div class="m-flex">
-                  <div class="m-label">
-                    Số điện thoại
+                <div class="m-col">
+                  <div class="m-flex">
+                    <div class="m-label">
+                      Số điện thoại
+                    </div>
+                    <div class="m-control">
+                      <input
+                        id="txtPhoneNumber"
+                        fieldName="ShopName"
+                        class="input-required"
+                        type="text"
+                        v-model="ShopData.phoneNumber"
+                        required
+                        style="width: 226px; margin-left: 42px"
+                      />
+                    </div>
                   </div>
-                  <div class="m-control">
-                    <input
-                      id="txtPhoneNumber"
-                      fieldName="ShopName"
-                      class="input-required"
-                      type="text"
-                      v-model="ShopData.phoneNumber"
-                      required
-                      style="width: 226px; margin-left: 42px"
-                    />
-                  </div>
+                  <small 
+                      id="error-phone" class="error-msg"
+                      :class="{isHide:isHideErrorPhone}"
+                      >SĐT không đúng định dạng US (***) ***-****
+                  </small>
                 </div>
                 <div class="m-flex mg-left-40px">
                   <div class="m-label">
@@ -97,6 +116,7 @@
                     />
                   </div>
                 </div>
+                <br/>
               </div>
               <div class="m-flex mg-top-15px">
                 <div class="m-label m-flex-3">Quốc gia</div>
@@ -235,8 +255,13 @@ export default {
   data() {
     return {
       dialog: false,
-      //isHide: true,
+      // Các biến dùng để validate
+      isHideErrorCode: true,
+      isHideErrorName: true,
+      isHideErrorAddress: true,
+      isHideErrorPhone: true,
       display: "none",
+      // Form Data
       ShopData: {},
       Shop: {
         'shopCode': '',
@@ -259,6 +284,10 @@ export default {
      */
     btnCancelOnClick() {
       this.ShopData = this.Shop;
+      this.isHideErrorCode = true;
+      this.isHideErrorName = true;
+      this.isHideErrorAddress = true;
+      this.isHideErrorPhone = true;
       this.$emit('closePopup', true)
     },
     /**
@@ -266,30 +295,97 @@ export default {
      * Created By: TXTrinh (22/02/2021)
      */
     async saveShop() {
-      await axios.post("http://localhost:52698/api/v1/shops", this.ShopData)
-      .then(response => {
-          alert(response.data['userMsg']);
-          this.btnCancelOnClick(); 
-          this.$emit('reload');
-      })
-      .catch(error => {
-          alert(error.response.data['userMsg']);
-      })
+      // validate dữ liệu trước khi cho phép thêm
+      if(this.validateData() == false) {
+        // validate ko hop le.
+      }
+      else{
+        await axios.post("http://localhost:52698/api/v1/shops", this.ShopData)
+        .then(response => {
+            alert(response.data['userMsg']);
+            this.btnCancelOnClick(); 
+            this.$emit('reload');
+        })
+        .catch(error => {
+            alert(error.response.data['userMsg']);
+        })
+      }
     },
     /**
      * Cập nhập thông tin cửa hàng 
      * Created By: TXTrinh (22/02/2021)
      */
     async editShop(){
-      await axios.put("http://localhost:52698/api/v1/shops", this.ShopData)
-      .then(response => {
-          alert(response.data['userMsg']);
-          this.btnCancelOnClick();
-          this.$emit('reload');
-      })
-      .catch(error => {
-          alert(error.response.data['userMsg']);
-      })
+      // validate dữ liệu trước khi cho phép sửa
+      if(this.validateData() == false) {
+        // validate ko hop le.
+      }
+      else{
+        await axios.put("http://localhost:52698/api/v1/shops", this.ShopData)
+        .then(response => {
+            alert(response.data['userMsg']);
+            this.btnCancelOnClick();
+            this.$emit('reload');
+        })
+        .catch(error => {
+            alert(error.response.data['userMsg']);
+        })
+      }
+    },
+    // Hàm Validate định dạng dữ liệu nhập vào, return: True - hợp lệ; False: không hợp lệ
+    validateData() {
+      const formShopCode = /^[A-Z0-9]{6}$/;
+      //const formPhoneVn = /((09|03|07|08|05)+([0-9]{8})\b)/g;
+      const formPhoneUs = /^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/;
+      var failed = 0;
+      
+      // validate ShopCode:
+      if((formShopCode.test(this.ShopData.shopCode.trim())==false) || (this.ShopData.shopCode.trim()=='')) {
+        this.isHideErrorCode = false;
+        failed ++;
+      }
+      else {
+        this.isHideErrorCode = true;
+      }
+
+      // Validate ShopName: 
+      if ((this.ShopData.shopName == null || this.ShopData.shopName.trim() == "")) {
+        this.isHideErrorName = false;
+        failed++;
+      } 
+      else {
+        this.isHideErrorName = true;
+      }
+
+      // validate Address:
+      if((this.ShopData.address==null || this.ShopData.address.trim() == "")) {
+        this.isHideErrorAddress = false;
+        failed ++;
+      }
+      else {
+        this.isHideErrorAddress = true;
+      }
+
+      // validate PhoneNumber
+      if((formPhoneUs.test(this.ShopData.phoneNumber.trim())==false) && (this.ShopData.phoneNumber.trim()!='')) {
+        this.isHideErrorPhone = false;
+        failed ++;
+      }
+      else {
+        this.isHideErrorPhone = true;
+      }
+      
+      // nếu không có lỗi thì không hiện cảnh báo
+      if(failed == 0) {
+        this.isHideErrorName = true;
+        this.isHideErrorCode = true;
+        this.isHideErrorAddress = true;
+        this.isHideErrorPhone = true;
+        return true;
+      }
+      else {
+        return false;
+      }
     },
   },
   /**
@@ -364,10 +460,10 @@ export default {
   position: fixed;
   border-radius: 5px;
   width: 750px;
-  height: 700px;
+  height: 720px;
   background-color: #fff;
   left: calc(50% - 325px);
-  top: calc(50% - 375px);
+  top: calc(50% - 420px);
 }
 .dialog-body {
   padding: 0 16px 16px 16px;
@@ -375,14 +471,14 @@ export default {
 .dialog-footer {
   display: flex;
   width: 100%;
-  height: 65px;
+  height: 68px;
   background-color: #e9ebee;
   border-radius: 0 0 5px 5px;
   align-items: center;
   justify-content: flex-end;
   padding: 12px 24px;
   box-sizing: border-box;
-  margin-top: 10px;
+  margin-top: 4px;
 }
 .currency-for-input {
   position: absolute;
@@ -434,5 +530,12 @@ input, select{
 input:focus, select:focus, textarea:focus{
   border: 1px solid #3ec347!important;
   outline: none!important;
+}
+.error-msg{
+  color: #FF0000;
+  font-style: italic;
+}
+#error-phone{
+  padding-left: 120px;
 }
 </style>

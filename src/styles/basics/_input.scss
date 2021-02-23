@@ -20,7 +20,9 @@ input, select {
     input::placeholder {
         font-size: 11px;
     }
-
+    select option{
+        padding-top: 5px !important;
+    }
 .input-search {
     padding-left: 8px;
     max-width: 60px !important;
