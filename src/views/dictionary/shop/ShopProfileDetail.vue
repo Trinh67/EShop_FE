@@ -105,15 +105,15 @@
                   fieldName="CountryName"
                   fieldValue="CountryId"
                   class="m-control m-flex-5"
-                  v-model="ShopData.CountryId"
+                  v-model="ShopData.countryId"
                   style="width: 124px; margin-right: 373px"
                 >
-                  <option value="0">Chọn Quốc gia</option>
+                  <option value="">Chọn Quốc gia</option>
                   <option value="6118a7ff-742b-25db-a9c1-8e252c39bb73">Việt Nam</option>
                 </select>
               </div>
               <input type="hidden" 
-                v-model="ShopData.StatusId"
+                v-model="ShopData.statusId"
                 value="674934cc-42cf-20cf-1d4a-aea48a10ed18"
               />
               <div class="m-row m-flex">
@@ -124,10 +124,10 @@
                     fieldName="ProvinceName"
                     fieldValue="ProvinceId"
                     class="m-control m-flex-7"
-                    v-model="ShopData.ProvinceId"
+                    v-model="ShopData.provinceId"
                     style="width: 248px; margin-left: 7px"
                   >
-                    <option value="0">Chọn Tỉnh/Thành phố</option>
+                    <option value="">Chọn Tỉnh/Thành phố</option>
                     <option value="148ed882-32b8-218e-9c20-39c2f00615e8">Hà Nội</option>
                     <option value="25c6c36e-1668-7d10-6e09-bf1378b8dc91">Thanh Hóa</option>
                   </select>
@@ -139,10 +139,10 @@
                     fieldName="DistrictName"
                     fieldValue="DistrictId"
                     class="m-control m-flex-7"
-                    v-model="ShopData.DistrictId"
+                    v-model="ShopData.districtId"
                     style="width: 256px;"
                   >
-                    <option value="0">Chọn Quận/Huyện</option>
+                    <option value="">Chọn Quận/Huyện</option>
                     <option value="148ed882-32b8-218e-9c20-39c2f00615e8">Cầu Giấy</option>
                     <option value="25c6c36e-1668-7d10-6e09-bf1378b8dc91">Bắc Từ Liêm</option>
                   </select>
@@ -156,10 +156,10 @@
                     fieldName="WardName"
                     fieldValue="WardId"
                     class="m-control m-flex-7"
-                    v-model="ShopData.WardId"
+                    v-model="ShopData.wardId"
                     style="width: 269px; margin-left: 10px"
                   >
-                    <option value="0">Chọn Phường/Xã</option>
+                    <option value="">Chọn Phường/Xã</option>
                     <option value="148ed882-32b8-218e-9c20-39c2f00615e8">Trung Văn</option>
                     <option value="25c6c36e-1668-7d10-6e09-bf1378b8dc91">Mai Dịch</option>
                   </select>
@@ -237,18 +237,18 @@ export default {
       dialog: false,
       //isHide: true,
       display: "none",
-
-      ShopData: {
+      ShopData: {},
+      Shop: {
         'shopId': '',
         'shopCode': '',
         'shopName': '',
         'address': '',
         'phoneNumber': '',
         'statusId': '674934cc-42cf-20cf-1d4a-aea48a10ed18',
-        'countryId': 0,
-        'provinceId': 0,
-        'districtId': 0,
-        'wardId': 0,
+        'countryId': "",
+        'provinceId': "",
+        'districtId': "",
+        'wardId': "",
       },
     };
   },
@@ -259,7 +259,7 @@ export default {
      * Created By: TXTrinh (22/02/2021)
      */
     btnCancelOnClick() {
-      this.ShopData = {};
+      this.ShopData = this.Shop;
       this.$emit('closePopup', true)
     },
     /**

@@ -8,7 +8,7 @@
         >
           <div class="btn-toolbar-icon icon-add"></div> Thêm mới
         </button>
-        <button class="m-btn m-btn-default">
+        <button class="m-btn m-btn-default" disabled>
           <div class="btn-toolbar-icon icon-multiply"></div> Nhân bản
         </button>
         <button 
