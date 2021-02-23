@@ -4,12 +4,14 @@
   </div>
 </template>
 <script>
+
 export default {
   name: "Content",
+  
   methods: {
     reload(){
       this.$emit('reload')
-    }
+    },
   },
 }
 </script>

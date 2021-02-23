@@ -1,5 +1,14 @@
 <template>
+  
   <div class="content-body">
+    <!-- Loading -->
+    <div class="vld-parent">
+        <loading :active.sync="isLoading" 
+        :can-cancel="false" 
+        :on-cancel="onCancel"
+        :is-full-page="fullPage"></loading>
+    </div>
+    <!-- Content Header -->
     <div class="header-content">
       <div class="toolbar">
         <button 
@@ -26,6 +35,7 @@
         <Details @closePopup="closePopup" :isHide="isHideParent" @reload="reloadData"/>
       </div>
     </div> 
+    <!-- Content Body -->
     <div
       class="grid grid-shop el-table el-table--fit el-table--scrollable-y el-table--enable-row-hover el-table--enable-row-transition"
     >
@@ -199,6 +209,7 @@
         </tbody>
       </table>
     </div>
+    <!-- Content footer -->
     <div class="paging-bar">
       <div class="paging-option">
         <div class="btn-select-page m-btn-firstpage" v-on:click="FirstPageNumber"></div>
@@ -227,7 +238,6 @@
       </div>
       <div class="paging-record-info">Hiển thị <b>{{startListShop}}-{{finishListShop}}/{{shopDataLength}}</b> nhân viên</div>
     </div>
-    
   </div>
 </template>
 
@@ -237,14 +247,22 @@ import Vue from 'vue';
 import * as axios from "axios";
 import Details from "./ShopProfileDetail";
 import { EventBus } from './../../../EventBus.js'
+// Import component
+import Loading from 'vue-loading-overlay';
+// Import stylesheet
+import 'vue-loading-overlay/dist/vue-loading.css';
 export default {
   name: "Shop",
   components: {
     Details,
+    Loading
   },
 
   data() {
     return {
+      isLoading: false,
+      fullPage: true,
+        
       isHideParent: true,
       selectedId: null,
       /**
@@ -290,6 +308,16 @@ export default {
   },
 
   methods: {
+    doAjax() {
+        this.isLoading = true;
+        // simulate AJAX
+        setTimeout(() => {
+          this.isLoading = false
+        },5000)
+    },
+    onCancel() {
+      console.log('User cancelled the loader.')
+    },
     /**
      * Hàm sử lí sự kiện nhấn vào thêm mới
      * Create By: TXTrinh (22/02/2021)
@@ -299,6 +327,7 @@ export default {
     },
     /**
      * Hàm sử lí sự kiện nhấn vào sửa
+     * Created By: TXTrinh (22/02/2021)
      */
     btnEditOnClick(){
       if(this.selectedId == null || this.selectedId == "") return;
@@ -307,11 +336,10 @@ export default {
     },
     /**
      * Hàm sử lí sự kiện nhấn vào Xóa
+     * Created By: TXTrinh (22/02/2021)
      */
     btnDeleteOnClick(){
       if(this.selectedId == null || this.selectedId == "") return;
-      //this.isHideParent = false;
-      //EventBus.$emit('showShop', this.selectedId);
       let r = confirm("Bạn chắc chắn muốn xóa cửa hàng đã chọn!");
       if(r == true) {
       axios
@@ -376,21 +404,25 @@ export default {
      * Các hàm thay đổi startPoint để phân trang
      * Create By: TXTrinh (22/02/2021)
      */
+    // Next Page
     IncreasePageNumber(){
         if(this.startPoint == parseInt(this.shopDataLength/this.number)) return;
         this.startPoint++;
         this.SearchShop();
     },
+    // Previous Page
     DecreasePageNumber(){
         if(this.startPoint == 0) return;
         this.startPoint--;
         this.SearchShop();
     },
+    // First Page
     FirstPageNumber(){
         if(this.startPoint == 0) return;
         this.startPoint = 0;
         this.SearchShop();
     },
+    // Last Page
     LastPageNumber(){
         if(this.startPoint == parseInt(this.shopDataLength/this.number)) return;
         this.startPoint = parseInt(this.shopDataLength/this.number);
@@ -403,6 +435,8 @@ export default {
      * Create By: TXTrinh (22/02/2021)
      */
     SearchShop(){
+        this.isLoading = true;
+
         let ShopCode, ShopName, Address, PhoneNumber, StatusId, isNull = true;
         this.currentPage = this.startPoint + 1;
         ShopCode = this.txtSearchShopCode
@@ -436,6 +470,8 @@ export default {
                 this.finishListShop = this.number*(this.startPoint + 1);
                 this.shops = response.data.slice(this.startListShop, this.finishListShop);
                 this.totalPage = Math.ceil(this.shopDataLength/this.number);
+
+                this.isLoading = false;
             })
             .catch(error => {
                 console.log(error)
@@ -466,13 +502,24 @@ export default {
    * Create By: TXTrinh (22/02/2021)
    */
   async created() {
-    const response = await axios.get("http://localhost:52698/api/v1/shops");
-    this.shops = response.data.slice(this.startPoint, this.number);
-    this.currentPage = this.startPoint + 1;
-    this.shopDataLength = response.data.length;
-    this.startListShop = this.number*this.startPoint + 1;
-    this.finishListShop = this.number*(this.startPoint + 1);
-    this.totalPage = Math.ceil(this.shopDataLength/this.number);
+    this.isLoading = true;
+
+    await axios.get("http://localhost:52698/api/v1/shops")
+    .then(response => {
+      this.shops = response.data.slice(this.startPoint, this.number);
+      this.currentPage = this.startPoint + 1;
+      this.shopDataLength = response.data.length;
+      this.startListShop = this.number*this.startPoint + 1;
+      this.finishListShop = this.number*(this.startPoint + 1);
+      this.totalPage = Math.ceil(this.shopDataLength/this.number);
+
+      this.isLoading = false;
+    })
+    .catch(error => {
+        console.log(error)
+        this.errored = true
+    })
+    .finally(() => this.loading = false); 
   },
 };
 </script>

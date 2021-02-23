@@ -1,18 +1,22 @@
 <template>
   <div>
+  <!-- Dialog -->
     <div
       class="m-dialog dialog-detail"
       title="Thông tin nhân viên"
       :class="{ isHide: isHide }"
     >
       <div class="dialog-modal"></div>
+      <!-- Dialog Content -->
       <div class="dialog-content">
+      <!-- Dialog Header -->
         <div class="dialog-header">
           <div class="dialog-header-title">Thêm mới/Cập nhập cửa hàng</div>
           <div class="dialog-header-close">
             <div v-on:click="btnCancelOnClick">x</div>
           </div>
         </div>
+      <!-- Dialog Body -->
         <div class="dialog-body">
           <div class="m-row m-flex">
             <div class="m-row el-left m-flex-4">
@@ -67,7 +71,6 @@
                     type="text"
                     v-model="ShopData.address"
                     rows= "8"
-                    cols= "78"
                     required
                   />
                   <small 
@@ -199,6 +202,7 @@
             </div>
           </div>
         </div>
+      <!-- Dialog Footer -->
         <div class="dialog-footer">
           <button 
             id="btnHelp" 
@@ -339,7 +343,7 @@ export default {
       const formPhoneUs = /^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/;
       var failed = 0;
       
-      // validate ShopCode:
+      // Validate ShopCode:
       if((formShopCode.test(this.ShopData.shopCode.trim())==false) || (this.ShopData.shopCode.trim()=='')) {
         this.isHideErrorCode = false;
         failed ++;
@@ -357,7 +361,7 @@ export default {
         this.isHideErrorName = true;
       }
 
-      // validate Address:
+      // Validate Address:
       if((this.ShopData.address==null || this.ShopData.address.trim() == "")) {
         this.isHideErrorAddress = false;
         failed ++;
@@ -366,7 +370,7 @@ export default {
         this.isHideErrorAddress = true;
       }
 
-      // validate PhoneNumber
+      // Validate PhoneNumber
       if((formPhoneUs.test(this.ShopData.phoneNumber.trim())==false) && (this.ShopData.phoneNumber.trim()!='')) {
         this.isHideErrorPhone = false;
         failed ++;
@@ -389,22 +393,29 @@ export default {
     },
   },
   /**
+  * Khởi tạo giá trị cho biến
+  * Created By: TXTrinh (23/02/2021)
+  */
+  created() {
+      this.ShopData = this.Shop;
+  },
+  /**
    * Lấy thông tin cửa hàng theo Id
    * Created By: TXTrinh (22/02/2021)
    */
   mounted(){
     EventBus.$on('showShop', idShop => {
-        axios
-        .get('http://localhost:52698/api/v1/shops/' + idShop)
-        .then(response => {
-            this.ShopData = response.data[0];
-        })
-        .catch(error => {
-            console.log(error)
-            this.errored = true
-        })
-        .finally(() => this.loading = false)
-        })
+      axios
+      .get('http://localhost:52698/api/v1/shops/' + idShop)
+      .then(response => {
+          this.ShopData = response.data[0];
+      })
+      .catch(error => {
+          console.log(error)
+          this.errored = true
+      })
+      .finally(() => this.loading = false)
+      })
     }
 };
 </script>
@@ -426,7 +437,7 @@ export default {
   padding-left: 16px;
   border-radius: 4px;
   display: flex;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
   background-color: #d8d8d8;
 }
@@ -518,8 +529,9 @@ export default {
   background-color: #0088c1;
 }
 
-textarea{
+textarea#txtAddress{
   padding: 16px;
+  width: calc(100% - 36px);
 }
 select#cbxPosition{
   margin-right: 375px;
