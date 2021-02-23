@@ -59,7 +59,7 @@
                     type="text"
                     v-model="ShopData.address"
                     rows= "8"
-                    cols= "76"
+                    cols= "78"
                     required
                   />
                 </div>
@@ -239,7 +239,6 @@ export default {
       display: "none",
       ShopData: {},
       Shop: {
-        'shopId': '',
         'shopCode': '',
         'shopName': '',
         'address': '',
