@@ -22,7 +22,7 @@
           @click="btnDeleteOnClick">
           <div class="btn-toolbar-icon icon-delete"></div> Xóa 
         </button>
-        <button class="m-btn m-btn-default"><div class="btn-toolbar-icon icon-load"></div> Nạp </button>
+        <button class="m-btn m-btn-default"><div class="btn-toolbar-icon icon-load" @click="reloadData"></div> Nạp </button>
         <Details @closePopup="closePopup" :isHide="isHideParent" @reload="reloadData"/>
       </div>
     </div> 
