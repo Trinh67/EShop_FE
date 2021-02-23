@@ -1,4 +1,4 @@
-# misa-example-vue2
+# misa-example-EShop
 
 ## Project setup
 ```
