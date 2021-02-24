@@ -58,6 +58,14 @@ import * as axios from "axios";
 export default {
   name: "DialogDel",
   props: ['isHideDelDialog', 'shopName', 'titleDelDialog', 'shopId'],
+  data() {
+    return {
+        Alert: {
+            Text: "",
+            Success: false,
+        },
+    }
+  },
   methods: {
     /**
      * Đóng dialog
@@ -72,24 +80,26 @@ export default {
      * Created by: TXTrinh (23/02/2021)
      */
     deleteAction(){
-        console.log(1);
-        this.isDel = true;
-        if(this.isDel == true) {
         axios
             .delete("http://localhost:52698/api/v1/shops?id=" + this.shopId)
             .then(response => {
-                alert(response.data['userMsg']);
                 this.btnCancelOnClick();
-                this.$emit('reload');
+                //this.$emit("reload");
+                this.Alert.Success = true;
+                this.Alert.Text = response.data['userMsg'];
+                this.$emit("hanldeAlert", this.Alert);
+                setTimeout(() => {this.$emit("reload")}, 1500);
             })
             .catch(error => {
                 console.log(error);
+                this.Alert.Success = true;
+                this.Alert.Text = error.data['userMsg'];
+                this.$emit("hanldeAlert", this.Alert);
                 this.errored = true
             })
             .finally(() => this.loading = false)
-        }
+        },
     }
-  }
 };
 </script>
 <style scoped>

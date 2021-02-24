@@ -289,6 +289,11 @@ export default {
         'districtId': "",
         'wardId': "",
       },
+      // Message
+      Alert: {
+        Text: "",
+        Success: false,
+      },
     };
   },
   props: ['isHide', 'titleDialog'],
@@ -317,12 +322,17 @@ export default {
       else{
         axios.post("http://localhost:52698/api/v1/shops", this.ShopData)
         .then(response => {
-            alert(response.data['userMsg']);
+            //alert(response.data['userMsg']);
+            //this.alertForm(response.data['userMsg'], true)
+            this.Alert.Text = response.data['userMsg'];
+            this.Alert.Success = true;
+            this.$emit("handleAlert", this.Alert);
             this.btnCancelOnClick(); 
-            this.$emit('reload');
+            setTimeout(() =>{this.$emit('reload');}, 1500) 
         })
         .catch(error => {
             alert(error.response.data['userMsg']);
+
         })
       }
     },
@@ -359,7 +369,7 @@ export default {
       switch (type) {
         case 'shopCode':  
           // Validate ShopCode:
-          { if((formShopCode.test(this.ShopData.shopCode.trim())==false) || (this.ShopData.shopCode.trim()=='')) {
+          { if((this.ShopData.shopCode == null) || (formShopCode.test(this.ShopData.shopCode.trim())==false) || (this.ShopData.shopCode.trim()=='')) {
             this.isHideErrorCode = false;
           }
           else {
@@ -368,7 +378,7 @@ export default {
           break;}
         case 'shopName':
           // Validate ShopName: 
-          {if ((this.ShopData.shopName == null || this.ShopData.shopName.trim() == "")) {
+          {if ((this.ShopData.shopName == null) || (this.ShopData.shopName.trim() == "")) {
             this.isHideErrorName = false;
           } 
           else {
@@ -378,7 +388,7 @@ export default {
         case 'address':
           { 
             // Validate Address:
-            if((this.ShopData.address==null || this.ShopData.address.trim() == "")) {
+            if((this.ShopData.address == null) || (this.ShopData.address.trim() == "")) {
               this.isHideErrorAddress = false;
             }
             else {
@@ -389,7 +399,7 @@ export default {
         case 'phoneNumber':
           { 
             // Validate PhoneNumber
-            if((formPhoneUs.test(this.ShopData.phoneNumber.trim())==false) && (this.ShopData.phoneNumber.trim()!='')) {
+            if((this.ShopData.phoneNumber != null) && (formPhoneUs.test(this.ShopData.phoneNumber.trim())==false) && (this.ShopData.phoneNumber.trim()!='')) {
               this.isHideErrorPhone = false;
             }
             else {
@@ -415,8 +425,15 @@ export default {
       // nếu không có lỗi thì không hiện cảnh báo
       if(this.isHideErrorCode && this.isHideErrorName && this.isHideErrorAddress && this.isHideErrorPhone)
         return true;
+      this.alertForm('Bạn phải điền thông tin đúng định dạng', true);
       return false;
-    }
+    },
+
+    alertForm(text, success) {
+      this.Alert.Text = text;
+      this.Alert.Success = success;
+      this.$emit("handleAlert", this.Alert);
+    },
   },
   /**
    * Lấy thông tin cửa hàng theo Id

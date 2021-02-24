@@ -32,8 +32,22 @@
           <div class="btn-toolbar-icon icon-delete"></div> Xóa 
         </button>
         <button class="m-btn m-btn-default"><div class="btn-toolbar-icon icon-load" @click="reloadData"></div> Nạp </button>
-        <Details @closePopup="closePopup" :isHide="isHideParent" :titleDialog="title" @reload="reloadData"/>
-        <DialogDel @closeDelDialog="closePopup" :isHideDelDialog="isHideDel" :titleDelDialog="title" :shopId="selectedId" :shopName="shopNameSelected" @reload="reloadData"/>
+        <Details 
+          @closePopup="closePopup" 
+          @hanldeAlert="HandleAlert" 
+          :isHide="isHideParent" 
+          :titleDialog="title" 
+          @reload="reloadData"
+        />
+        <DialogDel 
+          @closeDelDialog="closePopup" 
+          @hanldeAlert="HandleAlert" 
+          :isHideDelDialog="isHideDel" 
+          :titleDelDialog="title" 
+          :shopId="selectedId" 
+          :shopName="shopNameSelected" 
+          @reload="reloadData"
+        />
       </div>
     </div> 
     <!-- Content Body -->
@@ -207,6 +221,8 @@
       </div>
       <div class="paging-record-info">Hiển thị <b>{{startListShop}}-{{finishListShop}}/{{shopDataLength}}</b> nhân viên</div>
     </div>
+    <!-- toggle message -->
+    <div id="snackbar"></div>
   </div>
 </template>
 
@@ -441,7 +457,21 @@ export default {
     SetCurrentPage(){
       this.startPoint = this.currentPage - 1;
       this.SearchShop();
-    }
+    },
+    /**
+     * Thông báo cho người dùng
+     * Created by: TXTrinh (23/02/2021)
+     */
+    HandleAlert: function(Alert) {
+      var x = document.getElementById("snackbar");
+      x.innerHTML = Alert.Text;
+      x.className = "show";
+      console.log(1);
+      console.log(Alert.Text);
+      setTimeout(() => {
+        x.className = x.className.replace("show", "");
+      }, 3000);
+    },
   },
   /**
    * Theo dõi thay đổi của biến number
