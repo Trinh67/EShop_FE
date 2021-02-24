@@ -13,7 +13,10 @@
         <div class="dialog-header">
           <div class="dialog-header-title">Thêm mới/Cập nhập cửa hàng</div>
           <div class="dialog-header-close">
-            <div v-on:click="btnCancelOnClick">x</div>
+            <div 
+              v-on:click="btnCancelOnClick"
+              tabindex="16">x
+            </div>
           </div>
         </div>
       <!-- Dialog Body -->
@@ -28,6 +31,8 @@
                   <input
                     id="txtShopCode"
                     fieldName="ShopCode"
+                    ref="shopCode"
+                    tabindex="1"
                     required
                     class="input-required"
                     type="text"
@@ -47,6 +52,8 @@
                   <input
                     id="txtShopName"
                     fieldName="ShopName"
+                    ref="shopName"
+                    tabindex="2"
                     class="input-required"
                     type="text"
                     v-model="ShopData.shopName"
@@ -68,6 +75,8 @@
                     id="txtAddress"
                     fieldName="Address"
                     class="input-required"
+                    ref="address"
+                    tabindex="3"
                     type="text"
                     v-model="ShopData.address"
                     rows= "8"
@@ -91,6 +100,7 @@
                         id="txtPhoneNumber"
                         fieldName="ShopName"
                         class="input-required"
+                        tabindex="4"
                         type="text"
                         v-model="ShopData.phoneNumber"
                         required
@@ -113,6 +123,7 @@
                       id="txtShopTaxCode"
                       fieldName="ShopTaxCode"
                       type="text"
+                      tabindex="5"
                       required
                       v-model="ShopData.shopTaxCode"
                       style="width: 226px"
@@ -127,6 +138,7 @@
                   id="Country"
                   fieldName="CountryName"
                   fieldValue="CountryId"
+                  tabindex="6"
                   class="m-control m-flex-5"
                   v-model="ShopData.countryId"
                   style="width: 124px; margin-right: 373px"
@@ -146,6 +158,7 @@
                     id="Province"
                     fieldName="ProvinceName"
                     fieldValue="ProvinceId"
+                    tabindex="7"
                     class="m-control m-flex-7"
                     v-model="ShopData.provinceId"
                     style="width: 248px; margin-left: 7px"
@@ -161,6 +174,7 @@
                     id="District"
                     fieldName="DistrictName"
                     fieldValue="DistrictId"
+                    tabindex="8"
                     class="m-control m-flex-7"
                     v-model="ShopData.districtId"
                     style="width: 256px;"
@@ -178,6 +192,7 @@
                     id="Ward"
                     fieldName="WardName"
                     fieldValue="WardId"
+                    tabindex="9"
                     class="m-control m-flex-7"
                     v-model="ShopData.wardId"
                     style="width: 269px; margin-left: 10px"
@@ -193,6 +208,7 @@
                     id="Street"
                     fieldName="StreetName"
                     type="text"
+                    tabindex="10"
                     class="m-control m-flex-7"
                     placeholder="Đường phố"
                     style="width: 266px;"
@@ -206,6 +222,7 @@
         <div class="dialog-footer">
           <button 
             id="btnHelp" 
+            tabindex="12"
             class="m-btn m-btn-default"
           >
             <div class="items-header icons-support"></div>
@@ -217,6 +234,7 @@
           </button>
           <button 
             id="btnSave" 
+            tabindex="13"
             class="m-btn m-btn-default"
           >
             <div class="btn-toolbar-icon icon-save"></div>
@@ -229,6 +247,7 @@
           </button>
           <button 
             id="btnSaveAdd" 
+            tabindex="14"
             class="m-btn m-btn-default"
           >
             <div class="btn-toolbar-icon icon-add-save"></div>
@@ -241,6 +260,7 @@
           </button>
           <button 
             id="btnCancel" 
+            tabindex="15"
             class="m-btn m-btn-default m-btn-cancel" 
             v-on:click="btnCancelOnClick"
           >
@@ -404,6 +424,7 @@ export default {
    * Created By: TXTrinh (22/02/2021)
    */
   mounted(){
+    this.$refs.shopCode.focus();
     EventBus.$on('showShop', idShop => {
       axios
       .get('http://localhost:52698/api/v1/shops/' + idShop)
@@ -416,7 +437,7 @@ export default {
       })
       .finally(() => this.loading = false)
       })
-    }
+    },
 };
 </script>
 <style scoped>
@@ -474,7 +495,7 @@ export default {
   height: 720px;
   background-color: #fff;
   left: calc(50% - 325px);
-  top: calc(50% - 420px);
+  top: calc(50% - 400px);
 }
 .dialog-body {
   padding: 0 16px 16px 16px;

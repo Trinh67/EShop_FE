@@ -32,7 +32,7 @@
                 // simulate AJAX
                 setTimeout(() => {
                   loader.hide()
-                },5000)                 
+                },3000)                 
             },
             onCancel() {
               console.log('User cancelled the loader.')

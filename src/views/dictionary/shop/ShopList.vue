@@ -260,6 +260,10 @@ export default {
 
   data() {
     return {
+      /**
+       * Loading popup
+       * Created By: TXTrinh (23/02/2021)
+       */
       isLoading: false,
       fullPage: true,
         
@@ -516,8 +520,8 @@ export default {
       this.isLoading = false;
     })
     .catch(error => {
-        console.log(error)
-        this.errored = true
+        console.log(error);
+        this.errored = true;
     })
     .finally(() => this.loading = false); 
   },
