@@ -3,7 +3,7 @@
   <!-- Dialog -->
     <div
       class="m-dialog dialog-detail"
-      title="Thông tin nhân viên"
+      title="Dialog"
       :class="{ isHide: isHide }"
     >
       <div class="dialog-modal"></div>
@@ -11,7 +11,7 @@
       <div class="dialog-content">
       <!-- Dialog Header -->
         <div class="dialog-header">
-          <div class="dialog-header-title">Thêm mới/Cập nhập cửa hàng</div>
+          <div class="dialog-header-title">{{titleDialog}}</div>
           <div class="dialog-header-close">
             <div 
               v-on:click="btnCancelOnClick"
@@ -22,7 +22,7 @@
       <!-- Dialog Body -->
         <div class="dialog-body">
           <div class="m-row m-flex">
-            <div class="m-row el-left m-flex-4">
+            <div class="el-left m-flex-4">
               <div class="m-row m-flex">
                 <div class="m-label m-flex-2">
                   Mã cửa hàng <span class="label-required">*</span>
@@ -30,12 +30,12 @@
                 <div class="m-control m-flex-10">
                   <input
                     id="txtShopCode"
-                    fieldName="ShopCode"
                     ref="shopCode"
                     tabindex="1"
                     required
-                    class="input-required"
+                    :class="{requireErr: !isHideErrorCode}"
                     type="text"
+                    @blur="validate('shopCode')"
                     v-model="ShopData.shopCode"
                   />
                   <small 
@@ -51,11 +51,11 @@
                 <div class="m-control m-flex-10">
                   <input
                     id="txtShopName"
-                    fieldName="ShopName"
                     ref="shopName"
                     tabindex="2"
-                    class="input-required"
+                    :class="{requireErr: !isHideErrorName}"
                     type="text"
+                    @blur="validate('shopName')"
                     v-model="ShopData.shopName"
                     required
                   />
@@ -73,12 +73,12 @@
                 <div class="m-control m-flex-10">
                   <textarea
                     id="txtAddress"
-                    fieldName="Address"
-                    class="input-required"
+                    :class="{requireErr: !isHideErrorAddress}"
                     ref="address"
                     tabindex="3"
                     type="text"
                     v-model="ShopData.address"
+                    @blur="validate('address')"
                     rows= "8"
                     required
                   />
@@ -98,13 +98,13 @@
                     <div class="m-control">
                       <input
                         id="txtPhoneNumber"
-                        fieldName="ShopName"
                         class="input-required"
                         tabindex="4"
                         type="text"
                         v-model="ShopData.phoneNumber"
+                        @blur="validate('phoneNumber')"
                         required
-                        style="width: 226px; margin-left: 42px"
+                        style="width: 225px; margin-left: 44px"
                       />
                     </div>
                   </div>
@@ -121,12 +121,11 @@
                   <div class="m-control mg-left-40px">
                     <input
                       id="txtShopTaxCode"
-                      fieldName="ShopTaxCode"
                       type="text"
                       tabindex="5"
                       required
                       v-model="ShopData.shopTaxCode"
-                      style="width: 226px"
+                      style="width: 225px"
                     />
                   </div>
                 </div>
@@ -136,14 +135,12 @@
                 <div class="m-label m-flex-3">Quốc gia</div>
                 <select
                   id="Country"
-                  fieldName="CountryName"
-                  fieldValue="CountryId"
                   tabindex="6"
                   class="m-control m-flex-5"
                   v-model="ShopData.countryId"
-                  style="width: 124px; margin-right: 373px"
+                  style="width: 124px; margin-right: 372px"
                 >
-                  <option value="">Chọn Quốc gia</option>
+                  <option value="">Việt Nam</option>
                   <option value="6118a7ff-742b-25db-a9c1-8e252c39bb73">Việt Nam</option>
                 </select>
               </div>
@@ -156,30 +153,26 @@
                   <div class="m-label m-flex-4">Tỉnh/Thành phố</div>
                   <select
                     id="Province"
-                    fieldName="ProvinceName"
-                    fieldValue="ProvinceId"
                     tabindex="7"
                     class="m-control m-flex-7"
                     v-model="ShopData.provinceId"
-                    style="width: 248px; margin-left: 7px"
+                    style="width: 252px; margin-left: 6px;"
                   >
-                    <option value="">Chọn Tỉnh/Thành phố</option>
+                    <option value="">Nhập để tìm kiếm</option>
                     <option value="148ed882-32b8-218e-9c20-39c2f00615e8">Hà Nội</option>
                     <option value="25c6c36e-1668-7d10-6e09-bf1378b8dc91">Thanh Hóa</option>
                   </select>
                 </div>
-                <div class="m-flex mg-left-40px">
+                <div class="m-flex mg-left-30px">
                   <div class="m-label m-flex-4">Quận/Huyện</div>
                   <select
                     id="District"
-                    fieldName="DistrictName"
-                    fieldValue="DistrictId"
                     tabindex="8"
                     class="m-control m-flex-7"
                     v-model="ShopData.districtId"
-                    style="width: 256px;"
+                    style="width: 265px;"
                   >
-                    <option value="">Chọn Quận/Huyện</option>
+                    <option value="">Nhập để tìm kiếm</option>
                     <option value="148ed882-32b8-218e-9c20-39c2f00615e8">Cầu Giấy</option>
                     <option value="25c6c36e-1668-7d10-6e09-bf1378b8dc91">Bắc Từ Liêm</option>
                   </select>
@@ -190,28 +183,25 @@
                   <div class="m-label m-flex-4">Phường/Xã</div>
                   <select
                     id="Ward"
-                    fieldName="WardName"
-                    fieldValue="WardId"
                     tabindex="9"
                     class="m-control m-flex-7"
                     v-model="ShopData.wardId"
-                    style="width: 269px; margin-left: 10px"
+                    style="width: 276px; margin-left: 6px;"
                   >
-                    <option value="">Chọn Phường/Xã</option>
+                    <option value="">Nhập để tìm kiếm</option>
                     <option value="148ed882-32b8-218e-9c20-39c2f00615e8">Trung Văn</option>
                     <option value="25c6c36e-1668-7d10-6e09-bf1378b8dc91">Mai Dịch</option>
                   </select>
                 </div>
-                <div class="m-flex mg-left-40px">
-                  <div class="m-label m-flex-4">Đường phố</div>
+                <div class="m-flex mg-left-30px">
+                  <div class="m-label m-flex-4" style="padding-left: 4px">Đường phố</div>
                   <input
                     id="Street"
-                    fieldName="StreetName"
                     type="text"
                     tabindex="10"
                     class="m-control m-flex-7"
                     placeholder="Đường phố"
-                    style="width: 266px;"
+                    style="width: 270px;"
                   /> 
                 </div>
               </div>
@@ -300,7 +290,7 @@ export default {
       },
     };
   },
-  props: ['isHide'],
+  props: ['isHide', 'titleDialog'],
   methods: {
     /**
      * Đóng dialog
@@ -318,13 +308,13 @@ export default {
      * Lưu mới cửa hàng
      * Created By: TXTrinh (22/02/2021)
      */
-    async saveShop() {
+    saveShop() {
       // validate dữ liệu trước khi cho phép thêm
       if(this.validateData() == false) {
         // validate ko hop le.
       }
       else{
-        await axios.post("http://localhost:52698/api/v1/shops", this.ShopData)
+        axios.post("http://localhost:52698/api/v1/shops", this.ShopData)
         .then(response => {
             alert(response.data['userMsg']);
             this.btnCancelOnClick(); 
@@ -339,13 +329,13 @@ export default {
      * Cập nhập thông tin cửa hàng 
      * Created By: TXTrinh (22/02/2021)
      */
-    async editShop(){
+    editShop(){
       // validate dữ liệu trước khi cho phép sửa
       if(this.validateData() == false) {
         // validate ko hop le.
       }
       else{
-        await axios.put("http://localhost:52698/api/v1/shops", this.ShopData)
+        axios.put("http://localhost:52698/api/v1/shops", this.ShopData)
         .then(response => {
             alert(response.data['userMsg']);
             this.btnCancelOnClick();
@@ -357,79 +347,81 @@ export default {
       }
     },
     // Hàm Validate định dạng dữ liệu nhập vào, return: True - hợp lệ; False: không hợp lệ
-    validateData() {
+    validate(type) {
       const formShopCode = /^[A-Z0-9]{6}$/;
       //const formPhoneVn = /((09|03|07|08|05)+([0-9]{8})\b)/g;
       const formPhoneUs = /^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/;
-      var failed = 0;
+      //var failed = 0;
       
-      // Validate ShopCode:
-      if((formShopCode.test(this.ShopData.shopCode.trim())==false) || (this.ShopData.shopCode.trim()=='')) {
-        this.isHideErrorCode = false;
-        failed ++;
-      }
-      else {
-        this.isHideErrorCode = true;
-      }
-
-      // Validate ShopName: 
-      if ((this.ShopData.shopName == null || this.ShopData.shopName.trim() == "")) {
-        this.isHideErrorName = false;
-        failed++;
-      } 
-      else {
-        this.isHideErrorName = true;
-      }
-
-      // Validate Address:
-      if((this.ShopData.address==null || this.ShopData.address.trim() == "")) {
-        this.isHideErrorAddress = false;
-        failed ++;
-      }
-      else {
-        this.isHideErrorAddress = true;
-      }
-
-      // Validate PhoneNumber
-      if((formPhoneUs.test(this.ShopData.phoneNumber.trim())==false) && (this.ShopData.phoneNumber.trim()!='')) {
-        this.isHideErrorPhone = false;
-        failed ++;
-      }
-      else {
-        this.isHideErrorPhone = true;
-      }
-      
-      // nếu không có lỗi thì không hiện cảnh báo
-      if(failed == 0) {
-        this.isHideErrorName = true;
-        this.isHideErrorCode = true;
-        this.isHideErrorAddress = true;
-        this.isHideErrorPhone = true;
-        return true;
-      }
-      else {
-        return false;
+      switch (type) {
+        case 'shopCode':  
+          // Validate ShopCode:
+          { if((formShopCode.test(this.ShopData.shopCode.trim())==false) || (this.ShopData.shopCode.trim()=='')) {
+            this.isHideErrorCode = false;
+          }
+          else {
+            this.isHideErrorCode = true;
+          }
+          break;}
+        case 'shopName':
+          // Validate ShopName: 
+          {if ((this.ShopData.shopName == null || this.ShopData.shopName.trim() == "")) {
+            this.isHideErrorName = false;
+          } 
+          else {
+            this.isHideErrorName = true;
+          }
+          break;}
+        case 'address':
+          { 
+            // Validate Address:
+            if((this.ShopData.address==null || this.ShopData.address.trim() == "")) {
+              this.isHideErrorAddress = false;
+            }
+            else {
+              this.isHideErrorAddress = true;
+            }
+            break;
+          }
+        case 'phoneNumber':
+          { 
+            // Validate PhoneNumber
+            if((formPhoneUs.test(this.ShopData.phoneNumber.trim())==false) && (this.ShopData.phoneNumber.trim()!='')) {
+              this.isHideErrorPhone = false;
+            }
+            else {
+              this.isHideErrorPhone = true;
+            }
+            break;
+          }
+        default:
+          { 
+            break;
+          }
       }
     },
-  },
-  /**
-  * Khởi tạo giá trị cho biến
-  * Created By: TXTrinh (23/02/2021)
-  */
-  created() {
-      this.ShopData = this.Shop;
+    validateData(){
+      this.validate('shopCode');
+      this.validate('shopName');
+      this.validate('address');
+      this.validate('phoneNumber');
+      // nếu không có lỗi thì không hiện cảnh báo
+      if(this.isHideErrorCode && this.isHideErrorName && this.isHideErrorAddress && this.isHideErrorPhone)
+        return true;
+      return false;
+    }
   },
   /**
    * Lấy thông tin cửa hàng theo Id
    * Created By: TXTrinh (22/02/2021)
    */
   mounted(){
-    this.$refs.shopCode.focus();
     EventBus.$on('showShop', idShop => {
       axios
       .get('http://localhost:52698/api/v1/shops/' + idShop)
       .then(response => {
           this.ShopData = response.data[0];
+          document.getElementById("txtShopCode").focus();
       })
       .catch(error => {
           console.log(error)
@@ -492,7 +484,7 @@ export default {
   position: fixed;
   border-radius: 5px;
   width: 750px;
-  height: 720px;
+  height: 712px;
   background-color: #fff;
   left: calc(50% - 325px);
   top: calc(50% - 400px);
@@ -510,7 +502,7 @@ export default {
   justify-content: flex-end;
   padding: 12px 24px;
   box-sizing: border-box;
-  margin-top: 4px;
+  margin-top: 16px;
 }
 .currency-for-input {
   position: absolute;
@@ -564,11 +556,17 @@ input:focus, select:focus, textarea:focus{
   border: 1px solid #3ec347!important;
   outline: none!important;
 }
+.error{
+  border: 1px solid #FF0000;
+}
 .error-msg{
   color: #FF0000;
   font-style: italic;
 }
 #error-phone{
   padding-left: 120px;
+}
+.requireErr, .require-error:focus{
+    border: 1px solid #FF0000 !important;
 }
 </style>

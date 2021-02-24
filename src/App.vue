@@ -1,10 +1,8 @@
 <template>
   <div id="app">
-    <v-main>
       <Navbar />
       <Header />
       <Content v-if="isPanel" @reload="reloadData"/>
-    </v-main>
   </div>
 </template>
 

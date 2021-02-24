@@ -17,7 +17,7 @@
         >
           <div class="btn-toolbar-icon icon-add"></div> Thêm mới
         </button>
-        <button class="m-btn m-btn-default" disabled>
+        <button class="m-btn m-btn-default" disabled id="duplicate">
           <div class="btn-toolbar-icon icon-multiply"></div> Nhân bản
         </button>
         <button 
@@ -32,7 +32,7 @@
           <div class="btn-toolbar-icon icon-delete"></div> Xóa 
         </button>
         <button class="m-btn m-btn-default"><div class="btn-toolbar-icon icon-load" @click="reloadData"></div> Nạp </button>
-        <Details @closePopup="closePopup" :isHide="isHideParent" @reload="reloadData"/>
+        <Details @closePopup="closePopup" :isHide="isHideParent" :titleDialog="title" @reload="reloadData"/>
       </div>
     </div> 
     <!-- Content Body -->
@@ -52,132 +52,100 @@
               rowspan="1"
               width=12%
               class="el-table_30_column_114 is-leaf"
-              fieldName="ShopCode"
             >
-              <div class="cell">Mã cửa hàng</div>
+              <div class="cell">Mã cửa hàng<br/></div>
+              <div class="group-input">
+                <input class="select-filter-button" placeholder="*" disabled/>
+                <input
+                  id="txtSearchShopCode"
+                  class="input-search"
+                  type="text"
+                  placeholder=""
+                  v-model="txtSearchShopCode"
+                  @change="SearchShop()"
+                />
+              </div>
+              
             </th>
             <th
               colspan="1"
               rowspan="1"
               width=20%
               class="el-table_30_column_116 is-leaf"
-              fieldName="ShopName"
             >
-              <div class="cell">Tên cửa hàng</div>
+              <div class="cell">Tên cửa hàng<br/></div>
+              <div class="group-input">
+                <input class="select-filter-button" placeholder="*" disabled/>
+                <input
+                  id="txtSearchShopName"
+                  class="input-search"
+                  type="text"
+                  placeholder=""
+                  v-model="txtSearchShopName"
+                  @change="SearchShop()"
+                />
+              </div>
             </th>
             <th
               colspan="1"
               rowspan="1"
               width=44%
               class="el-table_30_column_115 is-leaf"
-              fieldName="Address"
             >
-              <div class="cell">Địa chỉ</div>
+              <div class="cell">Địa chỉ<br/></div>
+              <div class="group-input">
+                <input class="select-filter-button" placeholder="*" disabled/>
+                <input
+                  id="txtSearchAddress"
+                  class="input-search"
+                  type="text"
+                  placeholder=""
+                  v-model="txtSearchAddress"
+                  @change="SearchShop()"
+                />
+              </div>
             </th>
             <th
               colspan="1"
               rowspan="1"
               width=12%
               class="el-table_30_column_116 is-leaf"
-              fieldName="PhoneNumber"
             >
-              <div class="cell">Số điện thoại</div>
+              <div class="cell">Số điện thoại<br/></div>
+              <div class="group-input">
+                <input class="select-filter-button" placeholder="*" disabled/>
+                <input
+                  id="txtSearchPhoneNumber"
+                  class="input-search"
+                  type="text"
+                  placeholder=""
+                  v-model="txtSearchPhoneNumber"
+                  @change="SearchShop()"
+                />
+              </div>
             </th>
             <th
               colspan="1"
               rowspan="1"
               width=12%
               class="el-table_30_column_116 is-leaf"
-              fieldName="StatusName"
             >
-              <div class="cell">Trạng thái</div>
-            </th>
-          </tr>
-          <tr>
-            <th>
-              <select class="select-filter-button">
-                <option>* : Chứa</option>
-                <option>= : Bằng</option>
-                <option>+ : Bắt đầu bằng</option>
-                <option>- : Kết thúc bằng</option>
-                <option>! : Không chứa</option>
-              </select>
-              <input
-                id="txtSearchShopCode"
-                class="input-search"
-                type="text"
-                placeholder=""
-                v-model="txtSearchShopCode"
-                @change="SearchShop()"
-              />
-            </th>
-            <th>
-              <select class="select-filter-button">
-                <option value="*">* : Chứa</option>
-                <option value="=">= : Bằng</option>
-                <option value="+">+ : Bắt đầu bằng</option>
-                <option value="-">- : Kết thúc bằng</option>
-                <option value="!">! : Không chứa</option>
-              </select>
-              <input
-                id="txtSearchShopName"
-                class="input-search"
-                type="text"
-                placeholder=""
-                v-model="txtSearchShopName"
-                @change="SearchShop()"
-              />
-            </th>
-            <th>
-              <select class="select-filter-button">
-                <option>* : Chứa</option>
-                <option>= : Bằng</option>
-                <option>+ : Bắt đầu bằng</option>
-                <option>- : Kết thúc bằng</option>
-                <option>! : Không chứa</option>
-              </select>
-              <input
-                id="txtSearchAddress"
-                class="input-search"
-                type="text"
-                placeholder=""
-                v-model="txtSearchAddress"
-                @change="SearchShop()"
-              />
-            </th>
-            <th>
-              <select class="select-filter-button">
-                <option>* : Chứa</option>
-                <option>= : Bằng</option>
-                <option>+ : Bắt đầu bằng</option>
-                <option>- : Kết thúc bằng</option>
-                <option>! : Không chứa</option>
-              </select>
-              <input
-                id="txtSearchPhoneNumber"
-                class="input-search"
-                type="text"
-                placeholder=""
-                v-model="txtSearchPhoneNumber"
-                @change="SearchShop()"
-              />
-            </th>
-            <th>
-              <select
-                id="txtSearchStatus"
-                fieldName="StatusName"
-                fieldValue="StatusId"
-                class="m-control"
-                v-model="txtSearchStatus"
-                @change="SearchShop()"
-              >
-                <option value="">
-                  Tất cả trạng thái
-                </option>
-                <option class="" value="674934cc-42cf-20cf-1d4a-aea48a10ed18">Đang hoạt động</option>
-                <option class="" value="64a59a25-2488-54b0-f6b4-c8af08a50cbf">Tạm dừng hoạt động</option>
-                <option class="" value="34bd2cef-5026-567c-3b71-153b37881afe">Chờ kích hoạt</option>
-              </select>
+              <div class="cell">Trạng thái<br/></div>
+              <div class="group-input">
+                <select
+                  id="txtSearchStatus"
+                  class="m-control"
+                  v-model="txtSearchStatus"
+                  @change="SearchShop()"
+                >
+                  <option value="">
+                    Tất cả trạng thái
+                  </option>
+                  <option class="" value="674934cc-42cf-20cf-1d4a-aea48a10ed18">Đang hoạt động</option>
+                  <option class="" value="64a59a25-2488-54b0-f6b4-c8af08a50cbf">Tạm dừng hoạt động</option>
+                  <option class="" value="34bd2cef-5026-567c-3b71-153b37881afe">Chờ kích hoạt</option>
+                </select>
+              </div>
             </th>
           </tr>
         </thead>
@@ -266,9 +234,10 @@ export default {
        */
       isLoading: false,
       fullPage: true,
-        
+      
       isHideParent: true,
       selectedId: null,
+      title: "",
       /**
        * Dữ liệu dùng để tìm kiếm
        * Create By: TXTrinh (22/02/2021)
@@ -328,6 +297,8 @@ export default {
      */
     btnAddOnClick() {
       this.isHideParent = false;
+      this.title = "Thêm mới cửa hàng";
+      EventBus.$emit('addShop', this.isHideParent);
     },
     /**
      * Hàm sử lí sự kiện nhấn vào sửa
@@ -372,8 +343,7 @@ export default {
      * Created By: TXTrinh (22/02/2021)
      */
     rowOnClick(id){
-      console.log("Click");
-      console.log(this.selectedId);
+      this.title = "Cập nhập cửa hàng"
       if(this.selectedId == id){
        document.getElementById(id).classList.remove("selected");
        this.selectedId = null;
@@ -401,6 +371,7 @@ export default {
      * Create By: TXTrinh (22/02/2021)
      */
     closePopup(isHide){
+
       this.isHideParent = isHide;
     },
 
@@ -553,7 +524,6 @@ tr .filter{
   font-family: GoogleSans-Regular;
   padding-left: 16px;
   padding-right: 16px;
-  margin: 4px;
   outline: none;
   border: 1px solid #d9d9d9 !important;
   cursor: pointer;
@@ -576,5 +546,11 @@ td.filter{
 }
 select.input-number-record{
   min-width: 30px;
+}
+#duplicate{
+  opacity: 0.6;
+}
+#duplicate:hover{
+  background-color: #026b97;
 }
 </style>
