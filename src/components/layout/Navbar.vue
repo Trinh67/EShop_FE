@@ -22,7 +22,7 @@
                 <div class="nav-item-icon nav-item-buy"></div>
                 <div class="nav-item-text">Mua hàng</div>
             </a>
-            <router-link class="nav-item" to="/dictionary/customer">
+            <router-link class="nav-item" to="/dictionary/sale">
                 <div class="nav-item-icon nav-item-promotion"></div>
                 <div class="nav-item-text">Khuyến mại</div>
             </router-link>

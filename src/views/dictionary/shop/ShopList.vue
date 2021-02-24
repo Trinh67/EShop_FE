@@ -5,7 +5,7 @@
     <div class="vld-parent">
         <loading :active.sync="isLoading" 
         :can-cancel="false" 
-        :on-cancel="onCancel"
+        @click="onCancel"
         :is-full-page="fullPage"></loading>
     </div>
     <!-- Content Header -->
@@ -33,6 +33,7 @@
         </button>
         <button class="m-btn m-btn-default"><div class="btn-toolbar-icon icon-load" @click="reloadData"></div> Nạp </button>
         <Details @closePopup="closePopup" :isHide="isHideParent" :titleDialog="title" @reload="reloadData"/>
+        <DialogDel @closeDelDialog="closePopup" :isHideDelDialog="isHideDel" :titleDelDialog="title" :shopId="selectedId" :shopName="shopNameSelected" @reload="reloadData"/>
       </div>
     </div> 
     <!-- Content Body -->
@@ -155,7 +156,7 @@
             v-for="shop in shops"
             :key="shop.shopId"
             :id="shop.shopId"
-            @click="rowOnClick(shop.shopId)"
+            @click="rowOnClick(shop.shopId, shop.shopName)"
             @dblclick="rowOnDBClick(shop.shopId)"
           >
             <td>
@@ -214,16 +215,19 @@
 import Vue from 'vue';
 import * as axios from "axios";
 import Details from "./ShopProfileDetail";
-import { EventBus } from './../../../EventBus.js'
+import DialogDel from "@/components/base/TheDialogDel"
+import { EventBus } from '@/EventBus.js'
 // Import component
 import Loading from 'vue-loading-overlay';
 // Import stylesheet
 import 'vue-loading-overlay/dist/vue-loading.css';
+import '@/styles/pages/shopList.scss';
 export default {
   name: "Shop",
   components: {
     Details,
-    Loading
+    DialogDel,
+    Loading,
   },
 
   data() {
@@ -236,6 +240,8 @@ export default {
       fullPage: true,
       
       isHideParent: true,
+      isHideDel: true,
+      shopNameSelected: "",
       selectedId: null,
       title: "",
       /**
@@ -264,32 +270,16 @@ export default {
        * Create By: TXTrinh (22/02/2021)
        */
       shops: [],
-      headers: [
-        {
-          text: "Mã cửa hàng",
-          align: "start",
-          sortable: false,
-          value: "ShopCode",
-        },
-        { text: "Tên cửa hàng", value: "ShopName", align: "end" },
-        { text: "Địa chỉ cửa hàng", value: "Address" },
-        { text: "Số điện thoại", value: "PhoneNumber" },
-        { text: "Mã trạng thái", value: "StatusId" },
-        { text: "Tên trạng thái", value: "StatusName" },
-      ],
+      
     };
   },
 
   methods: {
-    doAjax() {
-        this.isLoading = true;
-        // simulate AJAX
-        setTimeout(() => {
-          this.isLoading = false
-        },5000)
-    },
+    /**
+     * Thoát Loading
+     */
     onCancel() {
-      console.log('User cancelled the loader.')
+      console.log('User cancelled the loader.');
     },
     /**
      * Hàm sử lí sự kiện nhấn vào thêm mới
@@ -307,6 +297,7 @@ export default {
     btnEditOnClick(){
       if(this.selectedId == null || this.selectedId == "") return;
       this.isHideParent = false;
+      this.title = "Cập nhập cửa hàng";
       EventBus.$emit('showShop', this.selectedId);
     },
     /**
@@ -315,21 +306,8 @@ export default {
      */
     btnDeleteOnClick(){
       if(this.selectedId == null || this.selectedId == "") return;
-      let r = confirm("Bạn chắc chắn muốn xóa cửa hàng đã chọn!");
-      if(r == true) {
-      axios
-        .delete("http://localhost:52698/api/v1/shops?id=" + this.selectedId)
-        .then(response => {
-          alert(response.data['userMsg']);
-          this.reloadData();
-        })
-        .catch(error => {
-          alert(response.data['userMsg']);
-          console.log(error);
-          this.errored = true
-        })
-        .finally(() => this.loading = false)
-      };
+      this.isHideDel = false;
+      this.title = "Xóa dữ liệu";
     },
     /**
      * Load lại dữ liệu
@@ -342,8 +320,7 @@ export default {
      * Sự kiện click vào 1 hàng
      * Created By: TXTrinh (22/02/2021)
      */
-    rowOnClick(id){
-      this.title = "Cập nhập cửa hàng"
+    rowOnClick(id, name){
       if(this.selectedId == id){
        document.getElementById(id).classList.remove("selected");
        this.selectedId = null;
@@ -352,11 +329,13 @@ export default {
         document.getElementById(this.selectedId).classList.remove("selected");
         document.getElementById(id).classList.add("selected");
         this.selectedId = id;
+        this.shopNameSelected = name;
       } else{
         document.getElementById(id).classList.add("selected");
+        this.shopNameSelected = name;
         this.selectedId = id;
       }
-      console.log(this.selectedId);
+      console.log(this.shopNameSelected);
     },
     /**
      * Sự kiến nhấn đúp vào 1 hàng
@@ -364,6 +343,7 @@ export default {
      */
     rowOnDBClick(id){
       this.isHideParent = false;
+      this.title = "Cập nhập cửa hàng";
       EventBus.$emit('showShop', id);
     },
     /**
@@ -371,7 +351,7 @@ export default {
      * Create By: TXTrinh (22/02/2021)
      */
     closePopup(isHide){
-
+      this.isHideDel = isHide;
       this.isHideParent = isHide;
     },
 
@@ -500,57 +480,4 @@ export default {
 </script>
 
 <style scoped>
-.grid-shop {
-  height: calc(100vh - 180px);
-}
-
-tr .filter{
-  height: 40px;
-}
-
-.currency-for-input {
-  position: absolute;
-  right: 40px;
-  line-height: 40px;
-  font-style: italic;
-}
-
-.select-filter-button{
-  align-items: center;
-  width: 40px;
-  height: 40px;
-  font-size: 13px;
-  color: #000000;
-  font-family: GoogleSans-Regular;
-  padding-left: 16px;
-  padding-right: 16px;
-  outline: none;
-  border: 1px solid #d9d9d9 !important;
-  cursor: pointer;
-  justify-content: center;
-}
-#txtSearchShopCode, #txtSearchShopName, #txtSearchAddress, #txtSearchPhoneNumber{
-  min-width: calc(100% - 52px);
-  border: 1px solid #d9d9d9 !important;
-}
-#txtSearchStatus{
-  margin: 4px;
-  border: 1px solid #d9d9d9 !important;
-  width: calc(100% - 8px);
-}
-#current-page{
-  width: 70px;
-}
-td.filter{
-  padding: 0px !important;
-}
-select.input-number-record{
-  min-width: 30px;
-}
-#duplicate{
-  opacity: 0.6;
-}
-#duplicate:hover{
-  background-color: #026b97;
-}
 </style>

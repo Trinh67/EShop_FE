@@ -103,6 +103,7 @@
                         type="text"
                         v-model="ShopData.phoneNumber"
                         @blur="validate('phoneNumber')"
+                        :class="{requireErr: !isHideErrorPhone}"
                         required
                         style="width: 225px; margin-left: 44px"
                       />
@@ -264,11 +265,11 @@
 </template>
 <script>
 import * as axios from "axios";
-import { EventBus } from './../../../EventBus.js'
+import '@/styles/dialog/dialog.scss';
+import { EventBus } from '@/EventBus.js'
 export default {
   data() {
     return {
-      dialog: false,
       // Các biến dùng để validate
       isHideErrorCode: true,
       isHideErrorName: true,
@@ -346,12 +347,14 @@ export default {
         })
       }
     },
-    // Hàm Validate định dạng dữ liệu nhập vào, return: True - hợp lệ; False: không hợp lệ
+    /**
+     * Hàm Validate định dạng dữ liệu nhập vào, return: True - hợp lệ; False: không hợp lệ
+     * Created by: TXTrinh (22/02/2021)
+     *  */ 
     validate(type) {
       const formShopCode = /^[A-Z0-9]{6}$/;
       //const formPhoneVn = /((09|03|07|08|05)+([0-9]{8})\b)/g;
       const formPhoneUs = /^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/;
-      //var failed = 0;
       
       switch (type) {
         case 'shopCode':  
@@ -400,6 +403,10 @@ export default {
           }
       }
     },
+    /**
+     * Kiểm tra toàn bộ dữ liệu
+     * Created by: TXTrinh (22/02/2021)
+     */
     validateData(){
       this.validate('shopCode');
       this.validate('shopName');
@@ -433,140 +440,4 @@ export default {
 };
 </script>
 <style scoped>
-.isHide {
-  display: none;
-}
-.m-dialog {
-  z-index: 3 !important;
-}
-.dialog-content{
-  z-index: 4;
-}
-.dialog-header {
-  position: relative;
-  height: 45px;
-  line-height: 60px;
-  padding-bottom: 16px;
-  padding-left: 16px;
-  border-radius: 4px;
-  display: flex;
-  font-size: 20px;
-  font-weight: bold;
-  background-color: #d8d8d8;
-}
-
-.dialog-header-close {
-  position: absolute;
-  right: 16px;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  color: #a5a5a5;
-  cursor: pointer;
-  top: 16px;
-  align-items: center;
-  border: none;
-  font-size: 30px;
-  line-height: 24px;
-}
-.dialog-modal {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: black;
-  opacity: 0.4;
-  z-index: 3;
-}
-
-.dialog-content {
-  position: fixed;
-  border-radius: 5px;
-  width: 750px;
-  height: 712px;
-  background-color: #fff;
-  left: calc(50% - 325px);
-  top: calc(50% - 400px);
-}
-.dialog-body {
-  padding: 0 16px 16px 16px;
-}
-.dialog-footer {
-  display: flex;
-  width: 100%;
-  height: 68px;
-  background-color: #e9ebee;
-  border-radius: 0 0 5px 5px;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 12px 24px;
-  box-sizing: border-box;
-  margin-top: 16px;
-}
-.currency-for-input {
-  position: absolute;
-  right: 40px;
-  line-height: 40px;
-  font-style: italic;
-}
-.dialog-footer button {
-  height: 35px;
-  width: auto;
-  color: #00577b;
-  font-weight: bold;
-  border-radius: 4px;
-  font-size: 16px;
-}
-.dialog-footer button:hover{
-  background-color: #0088c1;
-}
-.dialog-footer .icons-support{
-  margin-top: 0px!important;
-}
-#btnHelp{
-  margin-right: 170px;
-  margin-left: 0px;
-  padding-left: 0px;
-  background-color: #e9ebee;
-}
-#btnSave{
-  color: #ffffff;
-}
-#btnSaveAdd{
-  background-color: #ffffff;
-  border: 1px solid #00577b;
-}
-#btnSaveAdd:hover, #btnCancel:hover{
-  color: #ffffff;
-  background-color: #0088c1;
-}
-
-textarea#txtAddress{
-  padding: 16px;
-  width: calc(100% - 36px);
-}
-select#cbxPosition{
-  margin-right: 375px;
-}
-input, select{
-  height: 45px;
-}
-input:focus, select:focus, textarea:focus{
-  border: 1px solid #3ec347!important;
-  outline: none!important;
-}
-.error{
-  border: 1px solid #FF0000;
-}
-.error-msg{
-  color: #FF0000;
-  font-style: italic;
-}
-#error-phone{
-  padding-left: 120px;
-}
-.requireErr, .require-error:focus{
-    border: 1px solid #FF0000 !important;
-}
 </style>

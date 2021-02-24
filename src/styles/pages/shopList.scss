@@ -1,0 +1,57 @@
+.grid-shop {
+    height: calc(100vh - 180px);
+  }
+  
+  tr .filter{
+    height: 40px;
+  }
+  
+  .currency-for-input {
+    position: absolute;
+    right: 40px;
+    line-height: 40px;
+    font-style: italic;
+  }
+  
+  .select-filter-button{
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    font-size: 13px;
+    color: #000000;
+    font-family: GoogleSans-Regular;
+    padding-left: 16px;
+    padding-right: 16px;
+    outline: none;
+    margin-right: 2px;
+    border: 1px solid #d9d9d9 !important;
+    cursor: pointer;
+    justify-content: center;
+  }
+  #txtSearchShopCode, #txtSearchShopName, #txtSearchAddress, #txtSearchPhoneNumber{
+    min-width: calc(100% - 52px);
+    border: 1px solid #d9d9d9 !important;
+  }
+  #txtSearchStatus{
+    margin: 4px;
+    border: 1px solid #d9d9d9 !important;
+    width: calc(100% - 8px);
+  }
+  #current-page{
+    width: 70px;
+  }
+  td.filter{
+    padding: 0px !important;
+  }
+  select.input-number-record{
+    min-width: 30px;
+  }
+  #duplicate{
+    opacity: 0.6;
+  }
+  #duplicate:hover{
+    background-color: #026b97;
+  }
+  #txtSearchStatus{
+    height: 40px;
+  }
