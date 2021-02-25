@@ -142,7 +142,7 @@
                   style="width: 124px; margin-right: 372px"
                 >
                   <option value="">Việt Nam</option>
-                  <option value="6118a7ff-742b-25db-a9c1-8e252c39bb73">Việt Nam</option>
+                  <option value="1">Việt Nam</option>
                 </select>
               </div>
               <input type="hidden" 
@@ -157,11 +157,11 @@
                     tabindex="7"
                     class="m-control m-flex-7"
                     v-model="ShopData.provinceId"
-                    style="width: 252px; margin-left: 6px;"
+                    style="width: 250px; margin-left: 6px;"
                   >
                     <option value="">Nhập để tìm kiếm</option>
-                    <option value="">Hà Nội</option>
-                    <option value="">Thanh Hóa</option>
+                    <option value="1">Hà Nội</option>
+                    <option value="2">Thanh Hóa</option>
                   </select>
                 </div>
                 <div class="m-flex mg-left-30px">
@@ -174,10 +174,10 @@
                     style="width: 265px;"
                   >
                     <option value="">Nhập để tìm kiếm</option>
-                    <option value="">Cầu Giấy</option>
-                    <option value="">Ba Đình</option>
-                    <option value="">Tây Hồ</option>
-                    <option value="">Bắc Từ Liêm</option>
+                    <option value="1">Cầu Giấy</option>
+                    <option value="2">Ba Đình</option>
+                    <option value="3">Tây Hồ</option>
+                    <option value="4">Bắc Từ Liêm</option>
                   </select>
                 </div>
               </div>
@@ -192,14 +192,14 @@
                     style="width: 276px; margin-left: 6px;"
                   >
                     <option value="">Nhập để tìm kiếm</option>
-                    <option value="">Trung Văn</option>
-                    <option value="">Mai Dịch</option>
-                    <option value="">Cổ Nhuế</option>
-                    <option value="">Dịch Vọng</option>
+                    <option value="1">Trung Văn</option>
+                    <option value="2">Mai Dịch</option>
+                    <option value="3">Cổ Nhuế</option>
+                    <option value="4">Dịch Vọng</option>
                   </select>
                 </div>
                 <div class="m-flex mg-left-30px">
-                  <div class="m-label m-flex-4" style="padding-left: 4px">Đường phố</div>
+                  <div class="m-label m-flex-4">Đường phố</div>
                   <input
                     id="Street"
                     type="text"

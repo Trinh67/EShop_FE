@@ -26,7 +26,6 @@ export default {
   }),
   methods:{
     reload() {
-      console.log("1616");
       this.isPanel = false;
       this.$nextTick(() => {
         this.isPanel = true;
