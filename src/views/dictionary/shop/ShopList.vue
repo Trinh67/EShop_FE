@@ -1,5 +1,4 @@
 <template>
-  
   <div class="content-body">
     <!-- Loading -->
     <div class="vld-parent">
@@ -270,7 +269,6 @@ export default {
       txtSearchAddress: "",
       txtSearchPhoneNumber: "",
       txtSearchStatus: "",
-      
       /**
        * Dữ liệu dùng phân trang
        * Create By: TXTrinh (22/02/2021)
@@ -287,7 +285,6 @@ export default {
        * Create By: TXTrinh (22/02/2021)
        */
       shops: [],
-      
     };
   },
 
@@ -493,7 +490,6 @@ export default {
    */
   async created() {
     this.isLoading = true;
-
     await axios.get("http://localhost:52698/api/v1/shops")
     .then(response => {
       this.shops = response.data.slice(this.startPoint, this.number);
@@ -502,7 +498,6 @@ export default {
       this.startListShop = this.number*this.startPoint + 1;
       this.finishListShop = this.number*(this.startPoint + 1);
       this.totalPage = Math.ceil(this.shopDataLength/this.number);
-
       this.isLoading = false;
     })
     .catch(error => {

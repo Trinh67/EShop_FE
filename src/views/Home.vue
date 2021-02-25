@@ -14,6 +14,10 @@ export default {
     ShopManager
   },
   methods: {
+    /**
+     * Load lại dữ liệu
+     * Created by: TXTrinh (23/02/2021)
+     */
     reload(){
       this.$emit('reloadData')
     },

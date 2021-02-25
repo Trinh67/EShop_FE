@@ -22,6 +22,7 @@
             }
         },
         methods: {
+            // Loading
             submit() {
                 let loader = this.$loading.show({
                   // Optional parameters
@@ -34,6 +35,7 @@
                   loader.hide()
                 },3000)                 
             },
+            // Cancel Loading
             onCancel() {
               console.log('User cancelled the loader.')
             }                      
