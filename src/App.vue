@@ -2,7 +2,7 @@
   <div id="app">
       <Navbar />
       <Header />
-      <Content v-if="isPanel" @reload="reloadData"/>
+      <Content v-if="isPanel" @reloadData="reload"/>
   </div>
 </template>
 
@@ -25,7 +25,7 @@ export default {
     isPanel: true,
   }),
   methods:{
-    reloadData() {
+    reload() {
       console.log("1616");
       this.isPanel = false;
       this.$nextTick(() => {

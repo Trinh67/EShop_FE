@@ -10,7 +10,7 @@ export default {
   
   methods: {
     reload(){
-      this.$emit('reload')
+      this.$emit('reloadData')
     },
   },
 }

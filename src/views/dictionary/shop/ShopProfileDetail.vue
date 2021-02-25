@@ -160,8 +160,8 @@
                     style="width: 252px; margin-left: 6px;"
                   >
                     <option value="">Nhập để tìm kiếm</option>
-                    <option value="148ed882-32b8-218e-9c20-39c2f00615e8">Hà Nội</option>
-                    <option value="25c6c36e-1668-7d10-6e09-bf1378b8dc91">Thanh Hóa</option>
+                    <option value="">Hà Nội</option>
+                    <option value="">Thanh Hóa</option>
                   </select>
                 </div>
                 <div class="m-flex mg-left-30px">
@@ -174,8 +174,10 @@
                     style="width: 265px;"
                   >
                     <option value="">Nhập để tìm kiếm</option>
-                    <option value="148ed882-32b8-218e-9c20-39c2f00615e8">Cầu Giấy</option>
-                    <option value="25c6c36e-1668-7d10-6e09-bf1378b8dc91">Bắc Từ Liêm</option>
+                    <option value="">Cầu Giấy</option>
+                    <option value="">Ba Đình</option>
+                    <option value="">Tây Hồ</option>
+                    <option value="">Bắc Từ Liêm</option>
                   </select>
                 </div>
               </div>
@@ -190,8 +192,10 @@
                     style="width: 276px; margin-left: 6px;"
                   >
                     <option value="">Nhập để tìm kiếm</option>
-                    <option value="148ed882-32b8-218e-9c20-39c2f00615e8">Trung Văn</option>
-                    <option value="25c6c36e-1668-7d10-6e09-bf1378b8dc91">Mai Dịch</option>
+                    <option value="">Trung Văn</option>
+                    <option value="">Mai Dịch</option>
+                    <option value="">Cổ Nhuế</option>
+                    <option value="">Dịch Vọng</option>
                   </select>
                 </div>
                 <div class="m-flex mg-left-30px">
@@ -325,12 +329,11 @@ export default {
       else{
         axios.post("http://localhost:52698/api/v1/shops", this.ShopData)
         .then(response => {
-            //alert(response.data['userMsg']);
-            //this.alertForm(response.data['userMsg'], true)
             this.btnCancelOnClick(); 
             this.Alert.Success = true;
             this.Alert.Text = response.data['userMsg'];
             this.$emit("hanldeAlert", this.Alert);
+            setTimeout(() =>{this.$emit('reload');}, 1000) 
         })
         .catch(error => {
             this.Alert.Success = false;
@@ -358,7 +361,7 @@ export default {
             this.Alert.Success = true;
             this.Alert.Text = response.data['userMsg'];
             this.$emit("hanldeAlert", this.Alert);
-            setTimeout(() =>{this.$emit('reload');}, 3000) 
+            setTimeout(() =>{this.$emit('reload');}, 1000) 
         })
         .catch(error => {
             this.Alert.Text = error.response.data['userMsg'];
@@ -436,6 +439,13 @@ export default {
         return true;
       return false;
     },
+  },
+  /**
+   * Khởi tạo giá trị mặc định
+   * Created by: TXTrinh (22/02/2021)
+   */
+  created(){
+    this.ShopData = this.Shop;
   },
   /**
    * Lấy thông tin cửa hàng theo Id

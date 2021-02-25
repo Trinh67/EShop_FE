@@ -88,12 +88,12 @@ export default {
                 this.Alert.Success = true;
                 this.Alert.Text = response.data['userMsg'];
                 this.$emit("hanldeAlert", this.Alert);
-                setTimeout(() => {this.$emit("reload")}, 2000);
+                setTimeout(() => {this.$emit("reload")}, 1000);
             })
             .catch(error => {
                 console.log(error);
                 this.Alert.Success = false;
-                this.Alert.Text = error.data['userMsg'];
+                this.Alert.Text = error.response.data['userMsg'];
                 this.$emit("hanldeAlert", this.Alert);
                 this.errored = true
             })

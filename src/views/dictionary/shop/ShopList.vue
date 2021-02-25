@@ -331,7 +331,6 @@ export default {
      * Create By: TXTrinh (22/02/2021)
      */
     reloadData(){
-      console.log("reloadData");
       this.$emit('reloadData');
     },
     /**
@@ -475,7 +474,7 @@ export default {
         x.className = x.className.replace("showError", "");
       }, 2000);
       if(Alert.Success == true) {
-        this.reloadData()
+        setTimeout(() => {reloadData()}, 0);
       }
     },
   },

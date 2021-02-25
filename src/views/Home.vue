@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <ShopManager />
+    <ShopManager @reloadData="reload"/>
   </div>
 </template>
 
@@ -12,6 +12,11 @@ export default {
   name: 'Home',
   components: {
     ShopManager
-  }
+  },
+  methods: {
+    reload(){
+      this.$emit('reloadData')
+    },
+  },
 }
 </script>
