@@ -109,7 +109,8 @@
   
   textarea#txtAddress{
     padding: 12px;
-    width: calc(100% - 36px);
+    width: calc(100% - 28px);
+    border-radius: 4px;
   }
   select#cbxPosition{
     margin-right: 375px;
@@ -118,7 +119,7 @@
     height: 45px;
   }
   input:focus, select:focus, textarea:focus{
-    border: 1px solid #3ec347!important;
+    border: 1px solid #00577b!important;
     outline: none!important;
   }
   .error{

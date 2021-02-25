@@ -19,7 +19,7 @@ textarea{
     }
 
     input:focus, select:focus {
-        border-color: #019160;
+        border-color: #00577b;
     }
 
     input::placeholder {
@@ -121,6 +121,6 @@ textarea{
             }
 
         .m-combobox .m-combobox-data .mCombobox__item--selected {
-            background-color: #019160 !important;
+            background-color: #00577b !important;
             color: #ffffff;
         }

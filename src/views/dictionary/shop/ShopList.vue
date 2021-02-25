@@ -260,6 +260,7 @@ export default {
       shopNameSelected: "",
       selectedId: null,
       title: "",
+      Alert: {},
       /**
        * Dữ liệu dùng để tìm kiếm
        * Create By: TXTrinh (22/02/2021)
@@ -330,6 +331,7 @@ export default {
      * Create By: TXTrinh (22/02/2021)
      */
     reloadData(){
+      console.log("reloadData");
       this.$emit('reloadData');
     },
     /**
@@ -462,15 +464,19 @@ export default {
      * Thông báo cho người dùng
      * Created by: TXTrinh (23/02/2021)
      */
-    HandleAlert: function(Alert) {
+    HandleAlert(Alert) {
       var x = document.getElementById("snackbar");
       x.innerHTML = Alert.Text;
-      x.className = "show";
-      console.log(1);
-      console.log(Alert.Text);
+      if(Alert.Success == false) x.className = "showError";
+      else x.className = "showCorrect";
+      console.log(Alert.Success);
       setTimeout(() => {
-        x.className = x.className.replace("show", "");
-      }, 3000);
+        x.className = x.className.replace("showCorrect", "");
+        x.className = x.className.replace("showError", "");
+      }, 2000);
+      if(Alert.Success == true) {
+        this.reloadData()
+      }
     },
   },
   /**

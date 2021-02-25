@@ -318,21 +318,24 @@ export default {
       // validate dữ liệu trước khi cho phép thêm
       if(this.validateData() == false) {
         // validate ko hop le.
+        this.Alert.Success = false;
+        this.Alert.Text = 'Bạn phải điền thông tin đúng định dạng';
+        this.$emit("hanldeAlert", this.Alert);
       }
       else{
         axios.post("http://localhost:52698/api/v1/shops", this.ShopData)
         .then(response => {
             //alert(response.data['userMsg']);
             //this.alertForm(response.data['userMsg'], true)
-            this.Alert.Text = response.data['userMsg'];
-            this.Alert.Success = true;
-            this.$emit("handleAlert", this.Alert);
             this.btnCancelOnClick(); 
-            setTimeout(() =>{this.$emit('reload');}, 1500) 
+            this.Alert.Success = true;
+            this.Alert.Text = response.data['userMsg'];
+            this.$emit("hanldeAlert", this.Alert);
         })
         .catch(error => {
-            alert(error.response.data['userMsg']);
-
+            this.Alert.Success = false;
+            this.Alert.Text = error.response.data['userMsg'];
+            this.$emit("hanldeAlert", this.Alert);
         })
       }
     },
@@ -344,16 +347,22 @@ export default {
       // validate dữ liệu trước khi cho phép sửa
       if(this.validateData() == false) {
         // validate ko hop le.
+        this.Alert.Success = false;
+        this.Alert.Text = 'Bạn phải điền thông tin đúng định dạng';
+        this.$emit("hanldeAlert", this.Alert);
       }
       else{
         axios.put("http://localhost:52698/api/v1/shops", this.ShopData)
         .then(response => {
-            alert(response.data['userMsg']);
             this.btnCancelOnClick();
-            this.$emit('reload');
+            this.Alert.Success = true;
+            this.Alert.Text = response.data['userMsg'];
+            this.$emit("hanldeAlert", this.Alert);
+            setTimeout(() =>{this.$emit('reload');}, 3000) 
         })
         .catch(error => {
-            alert(error.response.data['userMsg']);
+            this.Alert.Text = error.response.data['userMsg'];
+            this.$emit("hanldeAlert", this.Alert);
         })
       }
     },
@@ -425,14 +434,7 @@ export default {
       // nếu không có lỗi thì không hiện cảnh báo
       if(this.isHideErrorCode && this.isHideErrorName && this.isHideErrorAddress && this.isHideErrorPhone)
         return true;
-      this.alertForm('Bạn phải điền thông tin đúng định dạng', true);
       return false;
-    },
-
-    alertForm(text, success) {
-      this.Alert.Text = text;
-      this.Alert.Success = success;
-      this.$emit("handleAlert", this.Alert);
     },
   },
   /**
