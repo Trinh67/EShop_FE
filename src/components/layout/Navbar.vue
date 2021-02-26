@@ -42,8 +42,8 @@ export default {
   name: 'MenuBarLinks',
   data () {
     return {
-      customer: '/dictionary/customer',
-      shop: '/dictionary/shop'
+      Sale: '/dictionary/sale',
+      Shop: '/dictionary/shop'
     };
   }
 };
